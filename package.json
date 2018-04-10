@@ -1,0 +1,55 @@
+{
+  "name": "routing-controllers-starter",
+  "description": "A starter app to use routing-controllers-wrapper",
+  "private": true,
+  "version": "0.0.1",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "dev": "nodemon --exec ts-node -- src/index.ts",
+    "build": "rimraf dist/ && tsc && copyfiles -a package.json './node_modules/**' dist/",
+    "build:test": "rimraf dist/ && tsc --project tsconfig.test.json && copyfiles package.json test/fixtures/* dist/",
+    "start": "node dist/",
+    "lint": "tslint src/*.ts src/modules/*.ts src/modules/**/*.ts src/modules/**/**/*.ts",
+    "test": "npm run lint && npm run build-test && nyc ava --verbose --serial dist/test/ && nyc report --reporter=html",
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "postinstall": "./bin/setup-git-hooks && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BenjD90/routing-controllers-starter.git"
+  },
+  "keywords": [
+    "routing-controller",
+    "express",
+    "typescript"
+  ],
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "author": "Benjamin DANIEL",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BenjD90/routing-controllers-starter/issues"
+  },
+  "homepage": "https://github.com/BenjD90/routing-controllers-starter#readme",
+  "dependencies": {
+    "@neo9/n9-node-conf": "^1.0.6",
+    "@neo9/n9-node-log": "^2.4.0",
+    "@neo9/n9-node-utils": "^1.5.0",
+    "@types/mongodb": "^3.0.12",
+    "@types/node": "^9.6.2",
+    "@types/request-promise-native": "^1.0.14",
+    "@types/std-mocks": "^1.0.0",
+    "ava": "^1.0.0-beta.3",
+    "copyfiles": "^2.0.0",
+    "glob": "^7.1.2",
+    "mongodb": "^3.0.6",
+    "nyc": "^11.6.0",
+    "request-promise-native": "^1.0.5",
+    "routing-controllers-wrapper": "^0.0.3",
+    "std-mocks": "^1.0.1",
+    "tslint": "^5.9.1",
+    "typescript": "^2.8.1"
+  }
+}
