@@ -6,10 +6,11 @@
 	"pkgFiles": [
 		"package.json"
 	],
-	"increment": "patch",
 	"preReleaseId": null,
+	"increment": "patch",
 	"buildCommand": false,
-	"changelogCommand": "npm run build-changelog",
+	"changelogCommand": "npm run build:changelog",
+  "safeBump": false,
 	"requireCleanWorkingDir": false,
 	"src": {
 		"commit": true,
@@ -17,10 +18,10 @@
 		"tag": true,
 		"tagName": "%s",
 		"tagAnnotation": "release: V %s",
-		"push": true,
+		"push": false,
 		"pushRepo": null,
 		"beforeStartCommand": false,
-		"afterReleaseCommand": "npm run post-release"
+		"afterReleaseCommand": "npm run post:release"
 	},
 	"npm": {
 		"publish": false

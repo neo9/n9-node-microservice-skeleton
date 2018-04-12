@@ -14,9 +14,9 @@
     "test": "npm run lint && npm run build:test && nyc ava --verbose --serial dist/test/ && nyc report --reporter=html",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "release": "export BABEL_DISABLE_CACHE=1 && release-it",
-    "release-dry": "export BABEL_DISABLE_CACHE=1 && release-it --dry-run=true",
-    "build-changelog": "conventional-changelog -i CHANGELOG.md -s",
-    "post-release": "echo $npm_package_version > tmp-$BUILD_TAG.txt && echo Successfully released $npm_package_version",
+    "release:dry": "export BABEL_DISABLE_CACHE=1 && release-it --dry-run=true",
+    "build:changelog": "conventional-changelog -i CHANGELOG.md -s -p jscs -r 0",
+    "post:release": "echo $npm_package_version > tmp-$BUILD_TAG.txt && echo Successfully released $npm_package_version",
     "postinstall": "./bin/setup-git-hooks && npm run build"
   },
   "repository": {

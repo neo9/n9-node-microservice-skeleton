@@ -1,10 +1,17 @@
-<a name="0.0.1"></a>
-## <small>0.0.1 (2018-04-12)</small>
+## Version 0.0.2 (2018-04-12)
 
-* tests: Fix tests ([4195923](https://github.com/BenjD90/routing-controllers-starter/commit/4195923))
-* init: Add dependencies ([6d26a7f](https://github.com/BenjD90/routing-controllers-starter/commit/6d26a7f))
-* Add basic app structure ([dcb3ed0](https://github.com/BenjD90/routing-controllers-starter/commit/dcb3ed0))
-* Initial commit ([013b963](https://github.com/BenjD90/routing-controllers-starter/commit/013b963))
+
+### init
+
+* Add dependencies ([6d26a7f](https://github.com/BenjD90/routing-controllers-starter/commit/6d26a7f)) (Benjamin Daniel)
+
+### release
+
+* V 0.0.2 ([4ba32d0](https://github.com/BenjD90/routing-controllers-starter/commit/4ba32d0)) (Benjamin Daniel)
+
+### tests
+
+* Fix tests ([4195923](https://github.com/BenjD90/routing-controllers-starter/commit/4195923)) (Benjamin Daniel)
 
 
 
