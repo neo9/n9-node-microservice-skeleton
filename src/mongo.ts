@@ -1,4 +1,5 @@
 import { Db, MongoClient, ObjectID } from 'mongodb';
+import { TransformationType } from 'class-transformer';
 
 export default async function(mongo: { url: string }): Promise<Db> {
 	const log = global.log.module('mongo');

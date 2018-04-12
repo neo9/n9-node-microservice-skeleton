@@ -12,15 +12,18 @@ export let context: any = {};
 export const get = (path: string, options: RequestPromiseOptions = {}) => {
 	return wrapLogs(rp({ method: 'GET', uri: url(path), resolveWithFullResponse: true, json: true, ...options }));
 };
-// tslint:disable-next-line:max-line-length
+
+// istanbul ignore next
 export const post = (path: string, options: RequestPromiseOptions = {}) => {
 	return wrapLogs(rp({ method: 'POST', uri: url(path), resolveWithFullResponse: true, json: true, ...options }));
 };
-// tslint:disable-next-line:max-line-length
+
+// istanbul ignore next
 export const put = (path: string, options: RequestPromiseOptions = {}) => {
 	return wrapLogs(rp({ method: 'PUT', uri: url(path), resolveWithFullResponse: true, json: true, ...options }));
 };
-// tslint:disable-next-line:max-line-length
+
+// istanbul ignore next
 export const del = (path: string, options: RequestPromiseOptions = {}) => {
 	return wrapLogs(rp({ method: 'DELETE', uri: url(path), resolveWithFullResponse: true, json: true, ...options }));
 };
@@ -47,6 +50,7 @@ export const startAPI = async () => {
 	stdMocks.restore();
 };
 
+/* istanbul ignore next */
 const url = (path: string = '/') => `http://localhost:${context.conf.http.port}` + join('/', path);
 
 const wrapLogs = async (apiCall: RequestPromise) => {

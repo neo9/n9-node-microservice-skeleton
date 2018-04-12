@@ -1,5 +1,6 @@
+import { plainToClass } from 'class-transformer';
 import * as crypto from 'crypto';
-import { Collection, FindOneOptions } from 'mongodb';
+import { Collection, FindOneOptions, ObjectId } from 'mongodb';
 import { Service } from "typedi";
 import { oid } from '../../mongo';
 import { User } from './users.models';

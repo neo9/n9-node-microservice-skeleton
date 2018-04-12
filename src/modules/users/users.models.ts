@@ -1,26 +1,27 @@
-import { IsString , MinLength, IsEmail} from "class-validator";
-import { Exclude } from "class-transformer";
+import { Allow, IsEmail, IsString, MinLength } from "class-validator";
 
 export class User {
-	@Exclude()
-	public _id: string;
+	public uid: string;
 
 	@IsString()
 	@MinLength(2)
+	@Allow()
 	public firstName: string;
 
 	@IsString()
 	@MinLength(2)
+	@Allow()
 	public lastName: string;
 
 	@IsString()
 	@IsEmail()
+	@Allow()
 	public email: string;
 
 	@IsString()
 	@MinLength(8)
+	@Allow()
 	public password: string;
 
-	@Exclude()
 	public createdAt: Date;
 }

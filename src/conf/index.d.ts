@@ -1,9 +1,9 @@
 import { N9Log } from '@neo9/n9-node-log';
-import { N9Micro } from '@neo9/n9-node-micro';
+import { RoutingControllerWrapper } from 'routing-controllers-wrapper';
 
 export interface Conf {
 	// n9-micro config
-	http?: N9Micro.HttpOptions;
+	http?: RoutingControllerWrapper.HttpOptions;
 	log?: N9Log.Options;
 	env?: string;
 	name?: string;

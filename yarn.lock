@@ -385,7 +385,11 @@
   dependencies:
     "@types/express" "*"
 
-"@types/node@*", "@types/node@^9.6.2":
+"@types/node@*":
+  version "9.6.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.4.tgz#0ef7b4cfc3499881c81e0ea1ce61a23f6f4f5b42"
+
+"@types/node@^9.6.2":
   version "9.6.2"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.2.tgz#e49ac1adb458835e95ca6487bc20f916b37aff23"
 
@@ -3765,9 +3769,9 @@ rimraf@2, rimraf@^2.5.1, rimraf@^2.5.4, rimraf@^2.6.1, rimraf@^2.6.2:
   dependencies:
     glob "^7.0.5"
 
-routing-controllers-wrapper@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/routing-controllers-wrapper/-/routing-controllers-wrapper-0.0.3.tgz#08ccd3c4c4ee28bd1db0a285acd6b9c22a7b8252"
+routing-controllers-wrapper@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/routing-controllers-wrapper/-/routing-controllers-wrapper-0.0.6.tgz#baf8069b4b3da5e3c9725d02e8adfc9077484a2a"
   dependencies:
     "@neo9/n9-node-log" "^2.4.0"
     "@neo9/n9-node-utils" "^1.5.0"

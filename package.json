@@ -10,8 +10,8 @@
     "build": "rimraf dist/ && tsc && copyfiles -a package.json './node_modules/**' dist/",
     "build:test": "rimraf dist/ && tsc --project tsconfig.test.json && copyfiles package.json test/fixtures/* dist/",
     "start": "node dist/",
-    "lint": "tslint src/*.ts src/modules/*.ts src/modules/**/*.ts src/modules/**/**/*.ts",
-    "test": "npm run lint && npm run build-test && nyc ava --verbose --serial dist/test/ && nyc report --reporter=html",
+    "lint": "tslint  --project tsconfig.json src/*.ts src/**/*.ts",
+    "test": "npm run lint && npm run build:test && nyc ava --verbose --serial dist/test/ && nyc report --reporter=html",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "postinstall": "./bin/setup-git-hooks && npm run build"
   },
@@ -47,7 +47,7 @@
     "mongodb": "^3.0.6",
     "nyc": "^11.6.0",
     "request-promise-native": "^1.0.5",
-    "routing-controllers-wrapper": "^0.0.3",
+    "routing-controllers-wrapper": "^0.0.6",
     "std-mocks": "^1.0.1",
     "tslint": "^5.9.1",
     "typescript": "^2.8.1"

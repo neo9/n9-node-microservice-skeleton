@@ -29,6 +29,10 @@ $RECYCLE.BIN/
 # Optional npm cache directory
 .npm
 
+# Coverage
+coverage
+.nyc_output
+
 # Sonar
 .scannerwork
 sonar-project.properties

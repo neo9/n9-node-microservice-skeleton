@@ -28,6 +28,7 @@ export class UsersController {
 
 		// Add user to database
 		const userMongo = await this.usersService.create(user);
+
 		delete userMongo.password;
 		// Send back the user created
 		return userMongo;
