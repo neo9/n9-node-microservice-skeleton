@@ -1,0 +1,15 @@
+version: '3'
+services:
+  starter:
+    build: ./
+    command: npm run dev
+    volumes:
+      - ./src:/home/app/src
+    ports:
+      - 8080:8080
+    networks:
+      - db
+
+networks:
+  db:
+    external: true

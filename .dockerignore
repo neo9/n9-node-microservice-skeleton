@@ -1,0 +1,9 @@
+node_modules
+dist
+Dockerfile
+docker-compose*
+*.swo
+*.swp
+.git
+.gitignore
+README
