@@ -5072,9 +5072,9 @@ rimraf@2, rimraf@^2.5.1, rimraf@^2.5.4, rimraf@^2.6.1, rimraf@^2.6.2:
   dependencies:
     glob "^7.0.5"
 
-routing-controllers-wrapper@^0.0.7:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/routing-controllers-wrapper/-/routing-controllers-wrapper-0.0.7.tgz#6630445748743caee469a405a647ab32f049c58f"
+routing-controllers-wrapper@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/routing-controllers-wrapper/-/routing-controllers-wrapper-0.0.8.tgz#21cd0739d1973ec053f1aab4cad1d64b6af513d5"
   dependencies:
     "@neo9/n9-node-log" "^2.4.0"
     "@neo9/n9-node-utils" "^1.5.0"
