@@ -6,7 +6,7 @@
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
-    "dev": "nodemon --exec ts-node -- src/index.ts",
+    "dev": "nodemon --exec ts-node --inspect=10000 -- src/index.ts",
     "build": "rimraf dist/ && tsc && copyfiles -a package.json './node_modules/**' dist/",
     "build:test": "rimraf dist/ && tsc --project tsconfig.test.json && copyfiles package.json test/fixtures/* dist/",
     "start": "node dist/",
@@ -17,7 +17,7 @@
     "release:dry": "export BABEL_DISABLE_CACHE=1 && release-it --dry-run=true",
     "build:changelog": "conventional-changelog -i CHANGELOG.md -s -p jscs -r 0",
     "post:release": "echo $npm_package_version > tmp-$BUILD_TAG.txt && echo Successfully released $npm_package_version",
-    "postinstall": "./bin/setup-git-hooks && npm run build"
+    "postinstall": "(./bin/setup-git-hooks && yarn run build) || echo 'Not a git repository'"
   },
   "repository": {
     "type": "git",
@@ -50,6 +50,7 @@
     "copyfiles": "^2.0.0",
     "glob": "^7.1.2",
     "mongodb": "^3.0.6",
+    "nodemon": "^1.17.3",
     "nyc": "^11.6.0",
     "release-it": "^7.3.0",
     "request-promise-native": "^1.0.5",
