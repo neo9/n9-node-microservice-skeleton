@@ -53,7 +53,7 @@
     "nyc": "^11.6.0",
     "release-it": "^7.3.0",
     "request-promise-native": "^1.0.5",
-    "routing-controllers-wrapper": "^0.0.6",
+    "routing-controllers-wrapper": "^0.0.7",
     "std-mocks": "^1.0.1",
     "tslint": "^5.9.1",
     "typescript": "^2.8.1"
