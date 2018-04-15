@@ -1,8 +1,7 @@
-import { plainToClass } from 'class-transformer';
 import * as crypto from 'crypto';
-import { Collection, FindOneOptions, ObjectId } from 'mongodb';
+import { Collection, FindOneOptions } from 'mongodb';
 import { Service } from "typedi";
-import { oid } from '../../mongo';
+import { mapObjectToClass, oid } from '../../mongo';
 import { User } from './users.models';
 
 @Service()
@@ -19,7 +18,7 @@ export class UsersService {
 	}
 
 	public async findOne(query: object, options?: FindOneOptions): Promise<User> {
-		return await this.usersCollection.findOne(query, options);
+		return mapObjectToClass(User, await this.usersCollection.findOne(query, options));
 	}
 
 	public async create(user: User): Promise<User> {
@@ -30,7 +29,7 @@ export class UsersService {
 		// Save to database
 		await this.usersCollection.insertOne(user);
 		// Send back user
-		return user;
+		return mapObjectToClass(User, user);
 	}
 
 	private async hashPassword(password: string): Promise<string> {
