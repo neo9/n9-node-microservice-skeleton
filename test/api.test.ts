@@ -57,6 +57,7 @@ test.serial('POST /users => 200 with good params', async (t: Assertions) => {
 		}
 	});
 	t.is(statusCode, 200);
+	t.regex(body._id, /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i, 'Good _id format');
 	t.is(body.firstName, 'Neo');
 	t.is(body.lastName, 'FIT');
 	t.is(body.email, 'neofit@neo9.fr');
@@ -66,6 +67,18 @@ test.serial('POST /users => 200 with good params', async (t: Assertions) => {
 	context.session = JSON.stringify({
 		userId: body._id
 	});
+});
+
+test.serial('POST /users => 400 with wrong params', async (t: Assertions) => {
+	const { statusCode, body } = await post('/users', {
+		body: {
+			firstName: 'Neo',
+			email: 'newameil' + new Date().getTime() + '@test.com',
+			password: 'azerty'
+		}
+	});
+	t.is(statusCode, 400, 'validate wrong => 400');
+	t.is(body.code, 'BadRequestError', 'body code : BadRequestError');
 });
 
 test.serial('POST /users => 409 with user already exists', async (t: Assertions) => {

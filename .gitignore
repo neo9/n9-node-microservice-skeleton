@@ -36,3 +36,6 @@ coverage
 # Sonar
 .scannerwork
 sonar-project.properties
+
+#local conf
+*local.ts
