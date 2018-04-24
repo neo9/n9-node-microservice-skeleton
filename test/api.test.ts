@@ -13,10 +13,10 @@ test.before('Start API', async (t: Assertions) => {
 /*
 ** Informations routes
 */
-test.serial('GET / => routing-controllers-starter', async (t: Assertions) => {
+test.serial('GET / => n9-node-microservice-skeleton', async (t: Assertions) => {
 	const { statusCode, body, stdout, stderr } = await get('/');
 	t.is(statusCode, 200);
-	t.is(body, 'routing-controllers-starter');
+	t.is(body, 'n9-node-microservice-skeleton');
 	t.is(stderr.length, 0);
 	t.is(stdout.length, 1);
 	t.true(stdout[0].includes('GET /'));

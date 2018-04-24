@@ -1,5 +1,5 @@
 {
-  "name": "routing-controllers-starter",
+  "name": "n9-node-microservice-skeleton",
   "description": "A starter app to use routing-controllers-wrapper",
   "private": true,
   "version": "0.0.3",
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BenjD90/routing-controllers-starter.git"
+    "url": "git+https://github.com/neo9/n9-node-microservice-skeleton.git"
   },
   "keywords": [
     "routing-controller",
@@ -33,10 +33,7 @@
   },
   "author": "Benjamin DANIEL",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/BenjD90/routing-controllers-starter/issues"
-  },
-  "homepage": "https://github.com/BenjD90/routing-controllers-starter#readme",
+  "homepage": "https://github.com/neo9/n9-node-microservice-skeleton#n9-node-microservice-skeleton",
   "dependencies": {
     "@neo9/n9-node-conf": "^1.0.6",
     "@neo9/n9-node-log": "^2.4.0",
@@ -52,11 +49,11 @@
     "glob": "^7.1.2",
     "lodash": "^4.17.5",
     "mongodb": "^3.0.6",
+    "n9-node-routing": "^1.0.0",
     "nodemon": "^1.17.3",
     "nyc": "^11.6.0",
     "release-it": "^7.3.0",
     "request-promise-native": "^1.0.5",
-    "routing-controllers-wrapper": "^0.0.8",
     "std-mocks": "^1.0.1",
     "tslint": "^5.9.1",
     "typescript": "^2.8.1"

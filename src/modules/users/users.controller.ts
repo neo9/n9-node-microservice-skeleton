@@ -1,7 +1,7 @@
 import { N9Error } from '@neo9/n9-node-utils';
 import { Body, Get, JsonController, Param, Post, Authorized } from "routing-controllers";
 import { Service } from "typedi";
-import { Acl } from 'routing-controllers-wrapper';
+import { Acl } from 'n9-node-routing';
 import { User } from './users.models';
 import { UsersService } from "./users.service";
 

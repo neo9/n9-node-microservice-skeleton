@@ -4,7 +4,7 @@ import n9Log from '@neo9/n9-node-log';
 import { Server } from 'http';
 import { Db } from 'mongodb';
 import { join } from 'path';
-import routingControllersWrapper from 'routing-controllers-wrapper';
+import routingControllersWrapper from 'n9-node-routing';
 // Add source map supports
 // tslint:disable:no-import-side-effect
 import 'source-map-support/register';
