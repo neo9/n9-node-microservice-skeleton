@@ -4,6 +4,7 @@ import { Service } from "typedi";
 import { Acl } from 'n9-node-routing';
 import { User } from './users.models';
 import { UsersService } from "./users.service";
+import { OpenAPI } from 'n9-node-routing';
 
 @Service()
 @JsonController('/users')
@@ -12,6 +13,17 @@ export class UsersController {
 	constructor(private usersService: UsersService) {
 	}
 
+	@OpenAPI({
+		description: 'Create one user',
+		responses: {
+			400: {
+				description: 'Bad Request'
+			},
+			409: {
+				desciption: 'User email already exist'
+			}
+		}
+	})
 	@Acl([{ action: 'createUser' }])
 	@Post()
 	public async createUser(@Body() user: User): Promise<User> {

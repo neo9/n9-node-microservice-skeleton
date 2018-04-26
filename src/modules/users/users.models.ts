@@ -1,4 +1,4 @@
-import { Allow, IsEmail, IsString, MinLength } from "class-validator";
+import { Allow, IsEmail, IsString, MinLength } from "n9-node-routing";
 
 export class User {
 	public uid: string;

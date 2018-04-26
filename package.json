@@ -2,7 +2,7 @@
   "name": "n9-node-microservice-skeleton",
   "description": "A starter app to use routing-controllers-wrapper",
   "private": true,
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
