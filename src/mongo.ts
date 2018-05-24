@@ -16,6 +16,7 @@ export default async function(mongo: { url: string }): Promise<Db> {
 }
 
 export function oid(id: string | ObjectID): ObjectID | null {
+	// istanbul ignore next
 	return id ? new ObjectID(id) : id as null;
 }
 

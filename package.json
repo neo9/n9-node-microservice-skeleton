@@ -36,7 +36,6 @@
   "homepage": "https://github.com/neo9/n9-node-microservice-skeleton#n9-node-microservice-skeleton",
   "dependencies": {
     "@neo9/n9-node-conf": "^1.0.6",
-    "@neo9/n9-node-log": "^2.4.0",
     "@neo9/n9-node-utils": "^1.5.0",
     "@types/lodash": "^4.14.107",
     "@types/mongodb": "^3.0.12",

@@ -57,6 +57,7 @@ if (conf.env !== 'test') {
 			})
 			.catch((e) => {
 				(global.log || console).error('Error on lauch', e);
+				throw e;
 			});
 }
 

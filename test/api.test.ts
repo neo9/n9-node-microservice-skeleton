@@ -19,7 +19,7 @@ test.serial('GET / => n9-node-microservice-skeleton', async (t: Assertions) => {
 	t.is(body, 'n9-node-microservice-skeleton');
 	t.is(stderr.length, 0);
 	t.is(stdout.length, 1);
-	t.true(stdout[0].includes('GET /'));
+	t.true(stdout[0].includes('"path":"/"'));
 });
 
 test.serial('GET /ping => pong', async (t: Assertions) => {
@@ -28,7 +28,7 @@ test.serial('GET /ping => pong', async (t: Assertions) => {
 	t.is(body, 'pong');
 	t.is(stderr.length, 0);
 	t.is(stdout.length, 1);
-	t.true(stdout[0].includes('GET /ping'));
+	t.true(stdout[0].includes('"path":"/ping"'));
 });
 
 test.serial('GET /routes => 1 routes', async (t: Assertions) => {
