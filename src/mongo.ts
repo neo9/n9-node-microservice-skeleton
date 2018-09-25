@@ -10,7 +10,8 @@ export type ClassType<T> = {
 export default async function(mongo: { url: string }): Promise<Db> {
 	const log = global.log.module('mongo');
 	log.info(`Connecting to ${mongo.url}...`);
-	const db = (await MongoClient.connect(mongo.url)).db();
+	global.dbClient = await MongoClient.connect(mongo.url);
+	const db = (global.dbClient as MongoClient).db();
 	log.info(`Connected`);
 	return db;
 }
