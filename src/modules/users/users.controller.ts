@@ -1,10 +1,10 @@
 import { N9Error } from '@neo9/n9-node-utils';
-import { Body, Get, JsonController, Param, Post, Authorized } from "routing-controllers";
-import { Service } from "typedi";
-import { Acl } from 'n9-node-routing';
+import { Acl, OpenAPI } from 'n9-node-routing';
+import { Authorized, Body, Get, JsonController, Param, Post, Session } from 'routing-controllers';
+import { Service } from 'typedi';
+import { TokenContent } from '../../models/token-content.models';
 import { User } from './users.models';
-import { UsersService } from "./users.service";
-import { OpenAPI } from 'n9-node-routing';
+import { UsersService } from './users.service';
 
 @Service()
 @JsonController('/users')
@@ -17,21 +17,21 @@ export class UsersController {
 		description: 'Create one user',
 		responses: {
 			400: {
-				description: 'Bad Request'
+				description: 'Bad Request',
 			},
 			409: {
-				desciption: 'User email already exist'
-			}
-		}
+				desciption: 'User email already exist',
+			},
+		},
 	})
 	@Acl([{ action: 'createUser' }])
 	@Post()
-	public async createUser(@Body() user: User): Promise<User> {
+	public async createUser(@Session({ required: false }) session: TokenContent, @Body() user: User): Promise<User> {
 
 		// sanitize email to lowercase
 		user.email = user.email.toLowerCase();
 		// Check if user by email already exists
-		const userExists = !! await this.usersService.getByEmail(user.email);
+		const userExists = !!await this.usersService.getByEmail(user.email);
 
 		// TODO: move to validation
 		if (userExists) {
@@ -39,7 +39,7 @@ export class UsersController {
 		}
 
 		// Add user to database
-		const userMongo = await this.usersService.create(user);
+		const userMongo = await this.usersService.create(user, session ? session.userId : 'no-auth-user');
 
 		delete userMongo.password;
 		// Send back the user created

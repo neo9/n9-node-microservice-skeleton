@@ -1,35 +1,33 @@
+import { MongoClient } from '@neo9/n9-mongo-client';
 import * as crypto from 'crypto';
-import { Collection, FindOneOptions } from 'mongodb';
-import { Service } from "typedi";
-import { mapObjectToClass, oid } from '../../mongo';
+import { Service } from 'typedi';
 import { User } from './users.models';
 
 @Service()
 export class UsersService {
+	private mongoClient: MongoClient<User, User>;
 
-	private usersCollection: Collection = global.db.collection('users');
+	constructor() {
+		this.mongoClient = new MongoClient('users', User, User, {
+			keepHistoric: true,
+		});
+	}
 
 	public async getById(userId: string): Promise<User> {
-		return await this.findOne({ _id: oid(userId) });
+		return await this.mongoClient.findOneById(userId);
 	}
 
 	public async getByEmail(email: string): Promise<User> {
-		return await this.findOne({ email });
+		return await this.mongoClient.findOneByKey(email, 'email');
 	}
 
-	public async findOne(query: object, options?: FindOneOptions): Promise<User> {
-		return mapObjectToClass(User, await this.usersCollection.findOne(query, options));
-	}
-
-	public async create(user: User): Promise<User> {
+	public async create(user: User, creatorUserId: string): Promise<User> {
 		// Hash password
 		user.password = await this.hashPassword(user.password);
 		// Add date creation
 		user.createdAt = new Date();
 		// Save to database
-		await this.usersCollection.insertOne(user);
-		// Send back user
-		return mapObjectToClass(User, user);
+		return await this.mongoClient.insertOne(user, creatorUserId);
 	}
 
 	private async hashPassword(password: string): Promise<string> {

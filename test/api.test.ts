@@ -13,7 +13,7 @@ test.before('Start API', async (t: Assertions) => {
 /*
 ** Informations routes
 */
-test.serial('GET / => n9-node-microservice-skeleton', async (t: Assertions) => {
+test('GET / => n9-node-microservice-skeleton', async (t: Assertions) => {
 	const { statusCode, body, stdout, stderr } = await get('/');
 	t.is(statusCode, 200);
 	t.is(body, 'n9-node-microservice-skeleton');
@@ -22,7 +22,7 @@ test.serial('GET / => n9-node-microservice-skeleton', async (t: Assertions) => {
 	t.true(stdout[0].includes('"path":"/"'));
 });
 
-test.serial('GET /ping => pong-db', async (t: Assertions) => {
+test('GET /ping => pong-db', async (t: Assertions) => {
 	const { statusCode, body, stdout, stderr } = await get('/ping');
 	t.is(statusCode, 200);
 	t.is(body, 'pong-db');
@@ -31,13 +31,13 @@ test.serial('GET /ping => pong-db', async (t: Assertions) => {
 	t.true(stdout[0].includes('"path":"/ping"'));
 });
 
-test.serial('GET /routes => 1 routes', async (t: Assertions) => {
+test('GET /routes => 1 routes', async (t: Assertions) => {
 	const { statusCode, body } = await get('/routes');
 	t.is(statusCode, 200);
 	t.is(body.length, 1);
 });
 
-test.serial('GET /404 => 404 status code', async (t: Assertions) => {
+test('GET /404 => 404 status code', async (t: Assertions) => {
 	const { statusCode, body } = await get('/404');
 	t.is(statusCode, 404);
 	t.is(body.code, 'not-found');
@@ -47,20 +47,20 @@ test.serial('GET /404 => 404 status code', async (t: Assertions) => {
 /*
 ** modules/users/
 */
-test.serial('POST /users => 200 with good params', async (t: Assertions) => {
+test('POST /users => 200 with good params', async (t: Assertions) => {
 	const { statusCode, body } = await post('/users', {
 		body: {
 			firstName: 'Neo',
-			lastName: 'FIT',
-			email: 'neofit@neo9.fr',
-			password: 'thenx4ever'
+			lastName: 'Nine',
+			email: 'neo@neo9.fr',
+			password: 'password-long'
 		}
 	});
 	t.is(statusCode, 200);
 	t.regex(body._id, /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i, 'Good _id format');
 	t.is(body.firstName, 'Neo');
-	t.is(body.lastName, 'FIT');
-	t.is(body.email, 'neofit@neo9.fr');
+	t.is(body.lastName, 'Nine');
+	t.is(body.email, 'neo@neo9.fr');
 	t.falsy(body.password);
 	// Add to context
 	context.user = body;
@@ -69,7 +69,7 @@ test.serial('POST /users => 200 with good params', async (t: Assertions) => {
 	});
 });
 
-test.serial('POST /users => 400 with wrong params', async (t: Assertions) => {
+test('POST /users => 400 with wrong params', async (t: Assertions) => {
 	const { statusCode, body } = await post('/users', {
 		body: {
 			firstName: 'Neo',
@@ -81,13 +81,13 @@ test.serial('POST /users => 400 with wrong params', async (t: Assertions) => {
 	t.is(body.code, 'BadRequestError', 'body code : BadRequestError');
 });
 
-test.serial('POST /users => 409 with user already exists', async (t: Assertions) => {
+test('POST /users => 409 with user already exists', async (t: Assertions) => {
 	const { statusCode, body } = await post('/users', {
 		body: {
 			firstName: 'Neo',
-			lastName: 'FIT',
-			email: 'neofit@neo9.fr',
-			password: 'thenx4ever'
+			lastName: 'Nine',
+			email: 'neo@neo9.fr',
+			password: 'password-long'
 		}
 	});
 	t.is(statusCode, 409);
@@ -97,14 +97,14 @@ test.serial('POST /users => 409 with user already exists', async (t: Assertions)
 /*
 ** modules/users/
 */
-test.serial('GET /users/:id => 404 with user not found', async (t: Assertions) => {
+test('GET /users/:id => 404 with user not found', async (t: Assertions) => {
 	const headers = { session: context.session };
 	const { statusCode, body } = await get('/users/012345678901234567890123', { headers });
 	t.is(statusCode, 404);
 	t.is(body.code, 'user-not-found');
 });
 
-test.serial('GET /users/:id => 200 with user found', async (t: Assertions) => {
+test('GET /users/:id => 200 with user found', async (t: Assertions) => {
 	const headers = { session: context.session };
 	const { statusCode, body } = await get(`/users/${context.user._id}`, { headers });
 	t.is(statusCode, 200);

@@ -1,6 +1,7 @@
+import { BaseMongoObject } from '@neo9/n9-mongo-client/dist/src/models';
 import { Allow, IsEmail, IsString, MinLength } from "n9-node-routing";
 
-export class User {
+export class User extends BaseMongoObject {
 	public uid: string;
 
 	@IsString()

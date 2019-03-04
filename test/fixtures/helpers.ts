@@ -1,10 +1,7 @@
 import { cb } from '@neo9/n9-node-utils';
 import { join } from 'path';
-import { UriOptions } from 'request';
-import * as request from 'request';
-import { RequestPromise, RequestPromiseOptions } from 'request-promise-native';
-import * as requestPromise from 'request-promise-native';
 import * as rp from 'request-promise-native';
+import { RequestPromise, RequestPromiseOptions } from 'request-promise-native';
 import * as stdMocks from 'std-mocks';
 
 export let context: any = {};
@@ -55,7 +52,9 @@ const url = (path: string = '/') => `http://localhost:${context.conf.http.port}`
 
 const wrapLogs = async (apiCall: RequestPromise) => {
 	// Store logs output
-	stdMocks.use();
+	stdMocks.use({
+		print: false
+	});
 	// Call API & check response
 	let res = null;
 	let err = null;

@@ -9,7 +9,7 @@ import routingControllersWrapper from 'n9-node-routing';
 // tslint:disable:no-import-side-effect
 import 'source-map-support/register';
 import { Conf } from './conf';
-import mongoConnect from './mongo';
+import { MongoUtils } from '@neo9/n9-mongo-client';
 
 // Handle Unhandled promise rejections
 process.on('unhandledRejection', /* istanbul ignore next */ (err) => {
@@ -34,12 +34,12 @@ async function start(): Promise<{ server: Server, db: Db, conf: Conf }> {
 	log.info('-'.repeat(initialInfos.length));
 
 	// Connect to MongoDB
-	const db = global.db = await mongoConnect(conf.mongo);
+	const db = global.db = await MongoUtils.connect(conf.mongo.url);
 	// Load modules
 	const { app, server } = await routingControllersWrapper({
 		hasProxy: true,
 		path: join(__dirname, 'modules'),
-		http: conf.http
+		http: conf.http,
 	});
 
 	// Log the startup time
