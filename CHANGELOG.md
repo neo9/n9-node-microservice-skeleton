@@ -1,3 +1,37 @@
+# Version [0.1.0](https://github.com/neo9/n9-node-microservice-skeleton/compare/0.0.4...0.1.0) (2019-03-04)
+
+
+### package
+
+* Upgrade n9-node-routing to latest 1.11.0 ([cc445f3](https://github.com/neo9/n9-node-microservice-skeleton/commit/cc445f3)) (Baptiste Leproux)
+
+### ping
+
+* Add check mongodb status on ping and upgrade n9-node-routing ([2c20b6c](https://github.com/neo9/n9-node-microservice-skeleton/commit/2c20b6c)) (Benjamin Daniel)
+
+### release
+
+* Remove useless tmp file ([138283e](https://github.com/neo9/n9-node-microservice-skeleton/commit/138283e)) (Benjamin Daniel)
+
+### test
+
+* Update test for n9-node-routing upgrade ([63200d5](https://github.com/neo9/n9-node-microservice-skeleton/commit/63200d5)) (Benjamin Daniel)
+
+### tslint
+
+* Fix tslint command ([25e7d5a](https://github.com/neo9/n9-node-microservice-skeleton/commit/25e7d5a)) (Benjamin Daniel)
+
+### update
+
+* Update n9-node-routing and add throw error on launch ([989c986](https://github.com/neo9/n9-node-microservice-skeleton/commit/989c986)) (Benjamin Daniel)
+
+### yarn
+
+* Update dependencies and use n9-mongo-client ([46cb18f](https://github.com/neo9/n9-node-microservice-skeleton/commit/46cb18f)) (Benjamin Daniel)
+* Upgrade n9-node-routing to add openapi and swagger ui ([b8c6d1e](https://github.com/neo9/n9-node-microservice-skeleton/commit/b8c6d1e)) (Benjamin Daniel)
+
+
+
 ## Version [0.0.4](https://github.com/neo9/n9-node-microservice-skeleton/compare/0.0.3...0.0.4) (2018-04-27)
 
 
@@ -12,6 +46,10 @@
 ### name
 
 * Change package name and use dependency n9-node-routing ([5ad9b01](https://github.com/neo9/n9-node-microservice-skeleton/commit/5ad9b01)) (Benjamin Daniel)
+
+### release
+
+* V 0.0.4 ([594461d](https://github.com/neo9/n9-node-microservice-skeleton/commit/594461d)) (Benjamin Daniel)
 
 ### yarn
 
