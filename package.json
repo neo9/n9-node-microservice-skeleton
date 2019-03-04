@@ -48,7 +48,7 @@
     "glob": "^7.1.2",
     "lodash": "^4.17.5",
     "mongodb": "^3.0.6",
-    "n9-node-routing": "^1.0.0",
+    "n9-node-routing": "^1.11.1",
     "nodemon": "^1.17.3",
     "nyc": "^11.6.0",
     "release-it": "^7.3.0",
