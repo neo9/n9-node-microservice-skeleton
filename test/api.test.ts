@@ -22,10 +22,10 @@ test.serial('GET / => n9-node-microservice-skeleton', async (t: Assertions) => {
 	t.true(stdout[0].includes('"path":"/"'));
 });
 
-test.serial('GET /ping => pong', async (t: Assertions) => {
+test.serial('GET /ping => pong-db', async (t: Assertions) => {
 	const { statusCode, body, stdout, stderr } = await get('/ping');
 	t.is(statusCode, 200);
-	t.is(body, 'pong');
+	t.is(body, 'pong-db');
 	t.is(stderr.length, 0);
 	t.is(stdout.length, 1);
 	t.true(stdout[0].includes('"path":"/ping"'));
