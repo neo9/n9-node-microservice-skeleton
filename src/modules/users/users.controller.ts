@@ -1,6 +1,6 @@
 import { N9Error } from '@neo9/n9-node-utils';
 import { Acl, OpenAPI } from 'n9-node-routing';
-import { Authorized, Body, Get, JsonController, Param, Post, Session } from 'routing-controllers';
+import { Authorized, Body, Get, JsonController, Param, Post, Session } from '@flyacts/routing-controllers';
 import { Service } from 'typedi';
 import { TokenContent } from '../../models/token-content.models';
 import { User } from './users.models';

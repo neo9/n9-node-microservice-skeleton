@@ -4,7 +4,6 @@
   "private": true,
   "version": "0.1.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "dev": "nodemon --exec node -r ts-node/register --inspect=10000 -- src/index.ts",
     "build": "rimraf dist/ && tsc && cp package.json dist/ && cp -r node_modules/ dist/",
@@ -34,6 +33,9 @@
   "author": "Benjamin DANIEL",
   "license": "MIT",
   "homepage": "https://github.com/neo9/n9-node-microservice-skeleton#n9-node-microservice-skeleton",
+  "devDependencies": {
+    "copyfiles": "^2.1.1"
+  },
   "dependencies": {
     "@neo9/n9-mongo-client": "^0.1.11",
     "@neo9/n9-node-conf": "^1.0.6",
