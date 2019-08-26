@@ -1,9 +1,8 @@
 import { BaseMongoObject } from '@neo9/n9-mongo-client/dist/src/models';
 import { Allow, IsEmail, IsString, MinLength } from "n9-node-routing";
+import { Exclude, Expose } from 'class-transformer';
 
-export class User extends BaseMongoObject {
-	public uid: string;
-
+export class UserRequestCreate extends BaseMongoObject {
 	@IsString()
 	@MinLength(2)
 	@Allow()
@@ -24,5 +23,29 @@ export class User extends BaseMongoObject {
 	@Allow()
 	public password: string;
 
-	public createdAt: Date;
+	@Allow()
+	public someData: string[];
+}
+
+export class UserEntity extends BaseMongoObject {
+	public firstName: string;
+	public lastName: string;
+	public email: string;
+	public password: string;
+	public someData: string[];
+}
+
+export class UserDetails extends UserEntity {
+}
+
+@Exclude()
+export class UserListItem extends BaseMongoObject {
+	@Expose()
+	public firstName: string;
+
+	@Expose()
+	public lastName: string;
+
+	@Expose()
+	public email: string;
 }

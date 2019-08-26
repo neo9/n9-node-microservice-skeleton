@@ -1,15 +1,15 @@
+import { MongoUtils } from '@neo9/n9-mongo-client';
 import n9Conf from '@neo9/n9-node-conf';
 // Dependencies
 import n9Log from '@neo9/n9-node-log';
 import { Server } from 'http';
 import { Db } from 'mongodb';
-import { join } from 'path';
 import routingControllersWrapper from 'n9-node-routing';
+import { join } from 'path';
 // Add source map supports
 // tslint:disable:no-import-side-effect
 import 'source-map-support/register';
 import { Conf } from './conf';
-import { MongoUtils } from '@neo9/n9-mongo-client';
 
 // Handle Unhandled promise rejections
 process.on('unhandledRejection', /* istanbul ignore next */ (err) => {
@@ -36,7 +36,7 @@ async function start(): Promise<{ server: Server, db: Db, conf: Conf }> {
 	// Connect to MongoDB
 	const db = global.db = await MongoUtils.connect(conf.mongo.url);
 	// Load modules
-	const { app, server } = await routingControllersWrapper({
+	const { server } = await routingControllersWrapper({
 		hasProxy: true,
 		path: join(__dirname, 'modules'),
 		http: conf.http,

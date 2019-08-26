@@ -1,14 +1,20 @@
 import { N9Error } from '@neo9/n9-node-utils';
 import { Acl, OpenAPI } from 'n9-node-routing';
 import { Authorized, Body, Get, JsonController, Param, Post, Session } from '@flyacts/routing-controllers';
-import { Service } from 'typedi';
+import { Service, Inject } from 'typedi';
 import { TokenContent } from '../../models/token-content.models';
-import { User } from './users.models';
+import { UserRequestCreate, UserDetails } from './users.models';
 import { UsersService } from './users.service';
+import { N9Log } from '@neo9/n9-node-log';
 
 @Service()
 @JsonController('/users')
 export class UsersController {
+	@Inject('logger')
+	private logger: N9Log;
+
+	@Inject('conf')
+	private conf: any;
 
 	constructor(private usersService: UsersService) {
 	}
@@ -26,7 +32,7 @@ export class UsersController {
 	})
 	@Acl([{ action: 'createUser' }])
 	@Post()
-	public async createUser(@Session({ required: false }) session: TokenContent, @Body() user: User): Promise<User> {
+	public async createUser(@Session({ required: false }) session: TokenContent, @Body() user: UserRequestCreate): Promise<UserDetails> {
 
 		// sanitize email to lowercase
 		user.email = user.email.toLowerCase();
@@ -48,7 +54,7 @@ export class UsersController {
 
 	@Authorized()
 	@Get('/:id')
-	public async getUserById(@Param('id') userId: string): Promise<User> {
+	public async getUserById(@Param('id') userId: string): Promise<UserDetails> {
 		// Check if user exists
 		const user = await this.usersService.getById(userId);
 		if (!user) {

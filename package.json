@@ -37,7 +37,7 @@
     "copyfiles": "^2.1.1"
   },
   "dependencies": {
-    "@neo9/n9-mongo-client": "^0.1.11",
+    "@neo9/n9-mongo-client": "^0.7.0",
     "@neo9/n9-node-conf": "^1.0.6",
     "@neo9/n9-node-utils": "^1.5.0",
     "@types/lodash": "^4.14.107",
