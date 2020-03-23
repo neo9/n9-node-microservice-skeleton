@@ -5,18 +5,21 @@ export default async (log: N9Log) => {
 	log = log.module('users');
 
 	log.info('Ensuring email unique index');
-	const usersService = await require('typedi').Container.get(UsersService) as UsersService;
+	const usersService = (await require('typedi').Container.get(UsersService)) as UsersService;
 
 	for (let i = 0; i < 1000; i++) {
 		const email = 'a+' + i + '@b.fr';
-		if (!await usersService.getByEmail(email)) {
-			await usersService.create({
-				email,
-				firstName: 'firstName',
-				lastName: 'lastName',
-				password: 'azerty',
-				someData: Array(1000).fill('something')
-			}, 'INIT');
+		if (!(await usersService.getByEmail(email))) {
+			await usersService.create(
+				{
+					email,
+					firstName: 'firstName',
+					lastName: 'lastName',
+					password: 'azerty',
+					someData: Array(1000).fill('something'),
+				},
+				'INIT',
+			);
 		}
 	}
 };

@@ -11,20 +11,22 @@ import { join } from 'path';
 import 'source-map-support/register';
 import { Conf } from './conf';
 
-// Handle Unhandled promise rejections
-process.on('unhandledRejection', /* istanbul ignore next */ (err) => {
-	throw err;
-});
-
-// Load project conf & set as global
-const conf = global.conf = n9Conf({ path: join(__dirname, 'conf') }) as Conf;
-// Load logging system
-const log = global.log = n9Log(conf.name, global.conf.log);
-// Load loaded configuration
-log.info(`Conf loaded: ${conf.env}`);
-
 // Start method
-async function start(): Promise<{ server: Server, db: Db, conf: Conf }> {
+async function start(
+	confOverride: Partial<Conf> = {},
+): Promise<{ server: Server; db: Db; conf: Conf }> {
+	// Load project conf & set as global
+	const conf = (global.conf = n9Conf({
+		path: join(__dirname, 'conf'),
+		override: {
+			value: confOverride,
+		},
+	}) as Conf);
+	// Load logging system
+	const log = (global.log = n9Log(conf.name, global.conf.log));
+	// Load loaded configuration
+	log.info(`Conf loaded: ${conf.env}`);
+
 	// Profile startup boot time
 	log.profile('startup');
 	// print app infos
@@ -34,7 +36,7 @@ async function start(): Promise<{ server: Server, db: Db, conf: Conf }> {
 	log.info('-'.repeat(initialInfos.length));
 
 	// Connect to MongoDB
-	const db = global.db = await MongoUtils.connect(conf.mongo.url);
+	const db = (global.db = await MongoUtils.connect(conf.mongo.url));
 	// Load modules
 	const { server } = await routingControllersWrapper({
 		hasProxy: true,
@@ -50,15 +52,15 @@ async function start(): Promise<{ server: Server, db: Db, conf: Conf }> {
 
 // Start server if not in test mode
 /* istanbul ignore if */
-if (conf.env !== 'test') {
+if (process.env.NODE_ENV !== 'test') {
 	start()
-			.then(() => {
-				(global.log || console).info('Launch SUCCESS !');
-			})
-			.catch((e) => {
-				(global.log || console).error('Error on lauch', e);
-				throw e;
-			});
+		.then(() => {
+			(global.log || console).info('Launch SUCCESS !');
+		})
+		.catch((e) => {
+			(global.log || console).error('Error on lauch', e);
+			throw e;
+		});
 }
 
 export default start;

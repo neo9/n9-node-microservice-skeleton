@@ -1,5 +1,5 @@
 import { BaseMongoObject } from '@neo9/n9-mongo-client/dist/src/models';
-import { Allow, IsEmail, IsString, MinLength } from "n9-node-routing";
+import { Allow, IsEmail, IsString, MinLength } from 'n9-node-routing';
 import { Exclude, Expose } from 'class-transformer';
 
 export class UserRequestCreate extends BaseMongoObject {
@@ -35,8 +35,7 @@ export class UserEntity extends BaseMongoObject {
 	public someData: string[];
 }
 
-export class UserDetails extends UserEntity {
-}
+export class UserDetails extends UserEntity {}
 
 @Exclude()
 export class UserListItem extends BaseMongoObject {

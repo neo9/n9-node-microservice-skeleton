@@ -1,44 +1,91 @@
-import { cb } from '@neo9/n9-node-utils';
+import n9NodeLog from '@neo9/n9-node-log';
+import { N9HttpClient } from 'n9-node-routing';
 import { join } from 'path';
-import * as rp from 'request-promise-native';
-import { RequestPromise, RequestPromiseOptions } from 'request-promise-native';
 import * as stdMocks from 'std-mocks';
+import { cb, N9Error } from '@neo9/n9-node-utils';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import src from '../../src';
+import { Server } from 'http';
+import { UserDetails } from '../../src/modules/users/users.models';
+import { Conf } from '../../src/conf';
+import { Db } from 'mongodb';
 
-export let context: any = {};
+export interface TestContext {
+	mongodServer: MongoMemoryServer;
+	server: Server;
+	session: string;
+	user: UserDetails;
+	conf: Conf;
+	db: Db;
+}
+export let context: Partial<TestContext> = {};
 
-export const get = (path: string, options: RequestPromiseOptions = {}) => {
-	return wrapLogs(rp({ method: 'GET', uri: url(path), resolveWithFullResponse: true, json: true, ...options }));
-};
+/* istanbul ignore next */
+const url = (path: string = '/') => `http://localhost:${context.conf.http.port}${join('/', path)}`;
+
+export async function get<T extends string | object = object>(
+	path: string,
+	responseType: 'text' | 'json' = 'json',
+	queryParams?: object,
+	headers?: object,
+): Promise<{
+	body: T;
+	err: N9Error;
+	stdout: string[];
+	stderr: string[];
+}> {
+	const httpClient = getHttpClient(responseType);
+	return await wrapLogs<T>(httpClient.get<T>(url(path), queryParams, headers));
+}
 
 // istanbul ignore next
-export const post = (path: string, options: RequestPromiseOptions = {}) => {
-	return wrapLogs(rp({ method: 'POST', uri: url(path), resolveWithFullResponse: true, json: true, ...options }));
-};
+export async function post<T>(
+	path: string,
+	body: any,
+): Promise<{
+	body: T;
+	err: N9Error;
+	stdout: string[];
+	stderr: string[];
+}> {
+	const httpClient = getHttpClient('json');
+	return await wrapLogs<T>(httpClient.post<T>(url(path), body));
+}
 
 // istanbul ignore next
-export const put = (path: string, options: RequestPromiseOptions = {}) => {
-	return wrapLogs(rp({ method: 'PUT', uri: url(path), resolveWithFullResponse: true, json: true, ...options }));
-};
-
-// istanbul ignore next
-export const del = (path: string, options: RequestPromiseOptions = {}) => {
-	return wrapLogs(rp({ method: 'DELETE', uri: url(path), resolveWithFullResponse: true, json: true, ...options }));
-};
+export async function put<T>(
+	path: string,
+	body: any,
+): Promise<{
+	body: T;
+	err: N9Error;
+	stdout: string[];
+	stderr: string[];
+}> {
+	const httpClient = getHttpClient('json');
+	return await wrapLogs<T>(httpClient.put<T>(url(path)));
+}
 
 export const startAPI = async () => {
 	stdMocks.use();
 	// Set env to 'test'
 	process.env.NODE_ENV = 'test';
-	const start = require('../../src').default;
-	// Require server
-	const ctx = await start();
-	// Drop collections
-	await ctx.db.dropDatabase();
-	// stop server
-	await cb(ctx.server.close.bind(ctx.server));
 	// Start again (to init files)
-	const { server, db, conf } = await start();
-	// Add variables to context
+
+	context.mongodServer = new MongoMemoryServer({
+		binary: {
+			version: '4.2.2',
+		},
+		// debug: true,
+	});
+	const mongoConnectionString = await context.mongodServer.getConnectionString();
+	const { server, db, conf } = await src({
+		mongo: {
+			url: mongoConnectionString,
+		},
+	});
+
+	// Add variables to t.context
 	context.server = server;
 	context.db = db;
 	context.conf = conf;
@@ -47,19 +94,21 @@ export const startAPI = async () => {
 	stdMocks.restore();
 };
 
-/* istanbul ignore next */
-const url = (path: string = '/') => `http://localhost:${context.conf.http.port}` + join('/', path);
+export const stopAPI = async () => {
+	await cb(context.server.close.bind(context.server));
+	await context.mongodServer.stop();
+};
 
-const wrapLogs = async (apiCall: RequestPromise) => {
+async function wrapLogs<T>(
+	apiCall: Promise<T>,
+): Promise<{ body: T; err: N9Error; stdout: string[]; stderr: string[] }> {
 	// Store logs output
-	stdMocks.use({
-		print: false
-	});
+	stdMocks.use();
 	// Call API & check response
-	let res = null;
+	let body = null;
 	let err = null;
 	try {
-		res = await apiCall;
+		body = await apiCall;
 	} catch (error) {
 		err = error;
 	}
@@ -67,9 +116,10 @@ const wrapLogs = async (apiCall: RequestPromise) => {
 	const { stdout, stderr } = stdMocks.flush();
 	// Restore logs output
 	stdMocks.restore();
-	// Return err, res and output
-	const body = (err ? err.response.body : res.body);
-	const statusCode = (err ? err.statusCode : res.statusCode);
-	const headers = (err ? err.response.headers : res.headers);
-	return { statusCode, headers, body, stdout, stderr };
-};
+	return { body, err, stdout, stderr };
+}
+
+function getHttpClient(responseType: 'text' | 'json'): N9HttpClient {
+	const httpClient = new N9HttpClient(global.log ?? n9NodeLog('test'), { responseType });
+	return httpClient;
+}
