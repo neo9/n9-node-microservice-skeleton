@@ -58,7 +58,7 @@
     "@neo9/n9-mongo-client": "^0.13.2",
     "@neo9/n9-node-conf": "^1.2.2",
     "@neo9/n9-node-utils": "^1.5.0",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.19",
     "n9-node-routing": "^1.20.5",
     "nodemon": "^2.0.2",
     "nyc": "^15.0.0",
