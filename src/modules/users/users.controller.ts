@@ -1,5 +1,3 @@
-import { N9Error } from '@neo9/n9-node-utils';
-import { Acl, OpenAPI } from 'n9-node-routing';
 import {
 	Authorized,
 	Body,
@@ -7,13 +5,20 @@ import {
 	JsonController,
 	Param,
 	Post,
+	QueryParam,
+	QueryParams,
+	Res,
 	Session,
 } from '@flyacts/routing-controllers';
-import { Service, Inject } from 'typedi';
-import { TokenContent } from '../../models/token-content.models';
-import { UserRequestCreate, UserDetails } from './users.models';
-import { UsersService } from './users.service';
 import { N9Log } from '@neo9/n9-node-log';
+import { N9Error, N9JSONStream } from '@neo9/n9-node-utils';
+import { Response } from 'express';
+import { Acl, OpenAPI } from 'n9-node-routing';
+import { Inject, Service } from 'typedi';
+import { SizeValidation } from '../../models/size-validation.models';
+import { TokenContent } from '../../models/token-content.models';
+import { UserDetails, UserListItem, UserRequestCreate } from './users.models';
+import { UsersService } from './users.service';
 
 @Service()
 @JsonController('/users')
@@ -46,9 +51,8 @@ export class UsersController {
 		// sanitize email to lowercase
 		user.email = user.email.toLowerCase();
 		// Check if user by email already exists
-		const userExists = !!(await this.usersService.getByEmail(user.email));
+		const userExists = await this.usersService.existsByEmail(user.email);
 
-		// TODO: move to validation
 		if (userExists) {
 			throw new N9Error('user-already-exists', 409);
 		}
@@ -72,8 +76,22 @@ export class UsersController {
 		if (!user) {
 			throw new N9Error('user-not-found', 404);
 		}
-		delete user.password;
-		// Send back the user
 		return user;
+	}
+
+	@Get('/')
+	public async getUsers(
+		@QueryParam('page') page: number = 0,
+		@QueryParam('size') size: number = 10,
+		@QueryParams() qp: SizeValidation,
+		@Res() res: Response,
+	): Promise<N9JSONStream<UserListItem>> {
+		const users = await this.usersService.find({}, page, size);
+		return users.pipe(
+			new N9JSONStream({
+				res,
+				total: await users.count(),
+			}),
+		);
 	}
 }

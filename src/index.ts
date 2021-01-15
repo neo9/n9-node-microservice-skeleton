@@ -1,29 +1,39 @@
+// configure class-validator to use the container of type id
+// this needs to be the first done in the file
+import { getFromContainer, MetadataStorage, useContainer } from 'class-validator';
+import { Container as iocContainer } from 'typedi';
+useContainer(iocContainer, {});
+iocContainer.set(MetadataStorage, getFromContainer(MetadataStorage));
+
 import { MongoUtils } from '@neo9/n9-mongo-client';
-import n9Conf from '@neo9/n9-node-conf';
+import n9NodeConf from '@neo9/n9-node-conf';
 // Dependencies
-import n9Log from '@neo9/n9-node-log';
+import n9NodeLog from '@neo9/n9-node-log';
+import * as bodyParser from 'body-parser';
+import { Express } from 'express';
+import fastSafeStringify from 'fast-safe-stringify';
 import { Server } from 'http';
 import { Db } from 'mongodb';
-import routingControllersWrapper from 'n9-node-routing';
+import n9NodeRouting, { N9NodeRouting } from 'n9-node-routing';
 import { join } from 'path';
 // Add source map supports
 // tslint:disable:no-import-side-effect
 import 'source-map-support/register';
-import { Conf } from './conf';
+import { Conf } from './conf/index.models';
 
 // Start method
 async function start(
 	confOverride: Partial<Conf> = {},
 ): Promise<{ server: Server; db: Db; conf: Conf }> {
 	// Load project conf & set as global
-	const conf = (global.conf = n9Conf({
+	const conf = (global.conf = n9NodeConf({
 		path: join(__dirname, 'conf'),
 		override: {
 			value: confOverride,
 		},
 	}) as Conf);
-	// Load logging system
-	const log = (global.log = n9Log(conf.name, global.conf.log));
+
+	const log = (global.log = n9NodeLog(conf.name, global.conf.log));
 	// Load loaded configuration
 	log.info(`Conf loaded: ${conf.env}`);
 
@@ -36,12 +46,40 @@ async function start(
 	log.info('-'.repeat(initialInfos.length));
 
 	// Connect to MongoDB
-	const db = (global.db = await MongoUtils.connect(conf.mongo.url));
+	const db = await MongoUtils.connect(conf.mongo.url, conf.mongo.options);
+	iocContainer.set('db', db);
+
+	const pingDbs = [
+		{
+			name: 'MongoDB',
+			thisArg: global.dbClient,
+			isConnected: global.dbClient.isConnected,
+		},
+	];
+	iocContainer.set('pingDbs', pingDbs);
+
+	const callbacksBeforeShutdown: N9NodeRouting.CallbacksBeforeShutdown[] = [];
+	iocContainer.set('callbacksBeforeShutdown', callbacksBeforeShutdown);
+
 	// Load modules
-	const { server } = await routingControllersWrapper({
+	const { server } = await n9NodeRouting({
 		hasProxy: true,
 		path: join(__dirname, 'modules'),
-		http: conf.http,
+		http: {
+			...conf.http,
+			beforeRoutingControllerLaunchHook: async (app2: Express) => {
+				app2.use(bodyParser.json({ limit: conf.bodyParser?.limit }));
+			},
+			ping: {
+				dbs: pingDbs,
+			},
+		},
+		openapi: conf.openapi,
+		shutdown: {
+			...conf.shutdown,
+			callbacksBeforeShutdown,
+		},
+		prometheus: conf.metrics.isEnabled ? {} : undefined,
 	});
 
 	// Log the startup time
@@ -58,7 +96,7 @@ if (process.env.NODE_ENV !== 'test') {
 			(global.log || console).info('Launch SUCCESS !');
 		})
 		.catch((e) => {
-			(global.log || console).error('Error on lauch', e);
+      (global.log || console).error(`Error on launch : `, { errString: fastSafeStringify(e) });
 			throw e;
 		});
 }

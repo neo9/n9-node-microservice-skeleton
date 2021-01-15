@@ -1,4 +1,4 @@
-import { Conf } from './index';
+import { Conf } from './index.models';
 
 const conf: Conf = {};
 

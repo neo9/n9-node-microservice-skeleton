@@ -1,5 +1,6 @@
 import { MongoClient } from '@neo9/n9-mongo-client';
 import * as crypto from 'crypto';
+import { Cursor, FilterQuery } from 'mongodb';
 import { Service } from 'typedi';
 import { UserDetails, UserEntity, UserListItem, UserRequestCreate } from './users.models';
 
@@ -29,6 +30,14 @@ export class UsersService {
 
 	public async existsByEmail(email: string): Promise<boolean> {
 		return await this.mongoClient.existsByKey(email, 'email');
+	}
+
+	public async find(
+		query: FilterQuery<UserEntity>,
+		page: number,
+		size: number,
+	): Promise<Cursor<UserListItem>> {
+		return await this.mongoClient.find(query, page, size);
 	}
 
 	public async create(user: UserRequestCreate, creatorUserId: string): Promise<UserDetails> {

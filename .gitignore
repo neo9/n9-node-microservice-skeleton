@@ -8,6 +8,7 @@ node_modules
 
 # Build directory
 dist
+openapi-documentation.json
 
 # Editor's config directories
 .vscode
@@ -32,6 +33,7 @@ $RECYCLE.BIN/
 # Coverage
 coverage
 .nyc_output
+coverage.lcov
 
 # Sonar
 .scannerwork

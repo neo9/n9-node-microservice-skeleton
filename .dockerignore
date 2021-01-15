@@ -6,4 +6,7 @@ docker-compose*
 *.swp
 .git
 .gitignore
-README
+Jenkinsfile*
+README.md
+CHANGELOG.md
+helm

@@ -1,14 +1,14 @@
 import n9NodeLog from '@neo9/n9-node-log';
+import { cb, N9Error } from '@neo9/n9-node-utils';
+import { Server } from 'http';
+import { Db } from 'mongodb';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 import { N9HttpClient } from 'n9-node-routing';
 import { join } from 'path';
 import * as stdMocks from 'std-mocks';
-import { cb, N9Error } from '@neo9/n9-node-utils';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import src from '../../src';
-import { Server } from 'http';
+import { Conf } from '../../src/conf/index.models';
 import { UserDetails } from '../../src/modules/users/users.models';
-import { Conf } from '../../src/conf';
-import { Db } from 'mongodb';
 
 export interface TestContext {
 	mongodServer: MongoMemoryServer;
@@ -120,6 +120,5 @@ async function wrapLogs<T>(
 }
 
 function getHttpClient(responseType: 'text' | 'json'): N9HttpClient {
-	const httpClient = new N9HttpClient(global.log ?? n9NodeLog('test'), { responseType });
-	return httpClient;
+	return new N9HttpClient(global.log ?? n9NodeLog('test'), { responseType });
 }

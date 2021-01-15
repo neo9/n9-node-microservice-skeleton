@@ -1,8 +1,8 @@
 // NPM modules
-import { cb } from '@neo9/n9-node-utils';
+import { cb, N9JSONStreamResponse } from '@neo9/n9-node-utils';
 import ava, { ExecutionContext } from 'ava';
+import { UserDetails, UserListItem } from '../src/modules/users/users.models';
 import { context, get, post, startAPI } from './fixtures/helpers';
-import { UserDetails } from '../src/modules/users/users.models';
 
 /*
  ** Start API
@@ -58,7 +58,7 @@ ava('POST /users => 200 with good params', async (t: ExecutionContext) => {
 	t.is(body.firstName, 'Neo');
 	t.is(body.lastName, 'Nine');
 	t.is(body.email, 'neo@neo9.fr');
-	t.falsy(body.password);
+	t.is(body.password, undefined);
 	// Add to context
 	context.user = body;
 	context.session = JSON.stringify({
@@ -69,7 +69,7 @@ ava('POST /users => 200 with good params', async (t: ExecutionContext) => {
 ava('POST /users => 400 with wrong params', async (t: ExecutionContext) => {
 	const { err } = await post<UserDetails>('/users', {
 		firstName: 'Neo',
-		email: 'newameil' + new Date().getTime() + '@test.com',
+		email: `newameil${new Date().getTime()}@test.com`,
 		password: 'azerty',
 	});
 	t.is(err.status, 400, 'validate wrong => 400');
@@ -101,6 +101,24 @@ ava('GET /users/:id => 200 with user found', async (t: ExecutionContext) => {
 	const headers = { session: context.session };
 	const { body } = await get<UserDetails>(`/users/${context.user._id}`, 'json', {}, headers);
 	t.is(body.email, context.user.email);
+});
+
+ava('GET /users => 200 with 10 users', async (t: ExecutionContext) => {
+	const headers = { session: context.session };
+	const { body } = await get<N9JSONStreamResponse<UserListItem>>(`/users`, 'json', {}, headers);
+	t.is(body.count, 10);
+	t.is((body.items[0] as UserDetails).password, undefined, 'password is not in the userListItem');
+});
+
+ava('GET /users => 400 with page size too big', async (t: ExecutionContext) => {
+	const headers = { session: context.session };
+	const { err } = await get<N9JSONStreamResponse<UserListItem>>(
+		`/users`,
+		'json',
+		{ size: 500 },
+		headers,
+	);
+	t.is(err.status, 400);
 });
 
 /*
