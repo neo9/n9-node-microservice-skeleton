@@ -96,7 +96,7 @@ if (process.env.NODE_ENV !== 'test') {
 			(global.log || console).info('Launch SUCCESS !');
 		})
 		.catch((e) => {
-      (global.log || console).error(`Error on launch : `, { errString: fastSafeStringify(e) });
+			(global.log || console).error(`Error on launch : `, { errString: fastSafeStringify(e) });
 			throw e;
 		});
 }
