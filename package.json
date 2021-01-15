@@ -2,7 +2,7 @@
   "name": "n9-node-microservice-skeleton",
   "description": "A starter app to use n9-node-routing",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "index.js",
   "scripts": {
     "dev": "TS_NODE_FILES=true nodemon -V --exec 'fuser -k 10010/tcp; sleep 2; node -r ts-node/register --inspect=0.0.0.0:10010 -- src/index.ts'",
