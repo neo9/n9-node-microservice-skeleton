@@ -1,9 +1,5 @@
-// configure class-validator to use the container of type id
-// this needs to be the first done in the file
-import { getFromContainer, MetadataStorage, useContainer } from 'class-validator';
-import { Container as iocContainer } from 'typedi';
-useContainer(iocContainer, {});
-iocContainer.set(MetadataStorage, getFromContainer(MetadataStorage));
+/* tslint:disable:ordered-imports */
+import 'reflect-metadata';
 
 import { MongoUtils } from '@neo9/n9-mongo-client';
 import n9NodeConf from '@neo9/n9-node-conf';
@@ -19,6 +15,7 @@ import { join } from 'path';
 // Add source map supports
 // tslint:disable:no-import-side-effect
 import 'source-map-support/register';
+import { Container } from 'typedi';
 import { Conf } from './conf/index.models';
 
 // Start method
@@ -47,7 +44,7 @@ async function start(
 
 	// Connect to MongoDB
 	const db = await MongoUtils.connect(conf.mongo.url, conf.mongo.options);
-	iocContainer.set('db', db);
+	Container.set('db', db);
 
 	const pingDbs = [
 		{
@@ -56,10 +53,10 @@ async function start(
 			isConnected: global.dbClient.isConnected,
 		},
 	];
-	iocContainer.set('pingDbs', pingDbs);
+	Container.set('pingDbs', pingDbs);
 
 	const callbacksBeforeShutdown: N9NodeRouting.CallbacksBeforeShutdown[] = [];
-	iocContainer.set('callbacksBeforeShutdown', callbacksBeforeShutdown);
+	Container.set('callbacksBeforeShutdown', callbacksBeforeShutdown);
 
 	// Load modules
 	const { server } = await n9NodeRouting({

@@ -2,7 +2,7 @@ import { BaseMongoObject } from '@neo9/n9-mongo-client/dist/src/models';
 import { Exclude, Expose } from 'class-transformer';
 import { Allow, IsEmail, IsString, MinLength } from 'n9-node-routing';
 
-export class UserRequestCreate extends BaseMongoObject {
+export class UserRequestCreate {
 	@IsString()
 	@MinLength(2)
 	@Allow()

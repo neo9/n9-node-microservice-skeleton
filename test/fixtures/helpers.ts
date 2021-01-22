@@ -1,3 +1,5 @@
+// tslint:disable:ordered-imports
+import src from '../../src';
 import n9NodeLog from '@neo9/n9-node-log';
 import { cb, N9Error } from '@neo9/n9-node-utils';
 import { Server } from 'http';
@@ -6,9 +8,10 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import { N9HttpClient } from 'n9-node-routing';
 import { join } from 'path';
 import * as stdMocks from 'std-mocks';
-import src from '../../src';
 import { Conf } from '../../src/conf/index.models';
 import { UserDetails } from '../../src/modules/users/users.models';
+
+const print = false;
 
 export interface TestContext {
 	mongodServer: MongoMemoryServer;
@@ -63,11 +66,11 @@ export async function put<T>(
 	stderr: string[];
 }> {
 	const httpClient = getHttpClient('json');
-	return await wrapLogs<T>(httpClient.put<T>(url(path)));
+	return await wrapLogs<T>(httpClient.put<T>(url(path), body));
 }
 
 export const startAPI = async () => {
-	stdMocks.use();
+	stdMocks.use({ print });
 	// Set env to 'test'
 	process.env.NODE_ENV = 'test';
 	// Start again (to init files)
@@ -103,7 +106,7 @@ async function wrapLogs<T>(
 	apiCall: Promise<T>,
 ): Promise<{ body: T; err: N9Error; stdout: string[]; stderr: string[] }> {
 	// Store logs output
-	stdMocks.use();
+	stdMocks.use({ print });
 	// Call API & check response
 	let body = null;
 	let err = null;

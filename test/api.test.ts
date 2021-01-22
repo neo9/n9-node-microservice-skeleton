@@ -1,8 +1,8 @@
-// NPM modules
+// tslint:disable:ordered-imports
+import { context, get, post, startAPI } from './fixtures/helpers';
 import { cb, N9JSONStreamResponse } from '@neo9/n9-node-utils';
 import ava, { ExecutionContext } from 'ava';
 import { UserDetails, UserListItem } from '../src/modules/users/users.models';
-import { context, get, post, startAPI } from './fixtures/helpers';
 
 /*
  ** Start API

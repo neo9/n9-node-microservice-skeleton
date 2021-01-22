@@ -1,9 +1,8 @@
 /* tslint:disable:ordered-imports */
 import 'reflect-metadata';
-import { getFromContainer, MetadataStorage, useContainer } from 'class-validator';
-import { Container as iocContainer } from 'typedi';
-useContainer(iocContainer, {});
-iocContainer.set(MetadataStorage, getFromContainer(MetadataStorage));
+import { useContainer } from 'class-validator';
+import { Container } from 'typedi';
+useContainer(Container);
 
 import { join } from 'path';
 import n9NodeConf from '@neo9/n9-node-conf';
