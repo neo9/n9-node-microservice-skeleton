@@ -3980,10 +3980,10 @@ mute-stream@0.0.8:
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.8.tgz#1630c42b2251ff81e2a283de96a5497ea92e5e0d"
   integrity sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==
 
-n9-node-routing@^1.27.1-rc.1:
-  version "1.27.1-rc.1"
-  resolved "https://registry.yarnpkg.com/n9-node-routing/-/n9-node-routing-1.27.1-rc.1.tgz#34b1960366e02e69bda68d8907a30e3513f8f433"
-  integrity sha512-PEmPvhGVZ9v4nGFrlxfFLPJQsNc3BYG/4dIB2si4jeW1edCJo+8NXv5KStViBAiyEpAzcPZYfN8lVaUIAAhPMQ==
+n9-node-routing@^1.27.1:
+  version "1.27.1"
+  resolved "https://registry.yarnpkg.com/n9-node-routing/-/n9-node-routing-1.27.1.tgz#4d61a976b55e1c1674cde3255a0cd7565d070fce"
+  integrity sha512-KMD5E/JQ40sLGMzf0lPams4DX4WR0Av1wNPzw6T+rITytVojWM+VSeNKcBScYfxvS5P93QwtSU4lmGmNTUF5jw==
   dependencies:
     "@neo9/n9-node-log" "^3.1.1"
     "@neo9/n9-node-utils" "^2.0.2"
