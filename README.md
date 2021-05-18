@@ -20,3 +20,5 @@ Then go to :
 - `localhost:8080/ping`
 - `localhost:8080/documentation/`
 - `localhost:8080/users`
+
+Before the first commit, do not forget to remove `src/conf/env` folder.

@@ -25,6 +25,12 @@ async function start(
 	// Load project conf & set as global
 	const conf = (global.conf = n9NodeConf({
 		path: join(__dirname, 'conf'),
+		extendConfig: {
+			key: 'starterApi',
+			path: {
+				relative: './env/env.yaml',
+			},
+		},
 		override: {
 			value: confOverride,
 		},
