@@ -1,20 +1,22 @@
 import { N9Log } from '@neo9/n9-node-log';
 import { N9Error, N9JSONStream } from '@neo9/n9-node-utils';
 import { Response } from 'express';
-import { Acl, OpenAPI } from 'n9-node-routing';
 import {
+	Acl,
 	Authorized,
 	Body,
 	Get,
+	Inject,
 	JsonController,
+	OpenAPI,
 	Param,
 	Post,
 	QueryParam,
 	QueryParams,
 	Res,
+	Service,
 	Session,
-} from 'routing-controllers';
-import { Inject, Service } from 'typedi';
+} from 'n9-node-routing';
 import { SizeValidation } from '../../models/size-validation.models';
 import { TokenContent } from '../../models/token-content.models';
 import { UserDetails, UserListItem, UserRequestCreate } from './users.models';

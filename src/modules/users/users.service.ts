@@ -1,7 +1,7 @@
 import { MongoClient } from '@neo9/n9-mongo-client';
 import * as crypto from 'crypto';
 import { Cursor, FilterQuery } from 'mongodb';
-import { Service } from 'typedi';
+import { Service } from 'n9-node-routing';
 import { UserDetails, UserEntity, UserListItem, UserRequestCreate } from './users.models';
 
 @Service()
