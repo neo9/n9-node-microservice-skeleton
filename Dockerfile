@@ -1,5 +1,5 @@
 # stretch required for gc-stats post build
-FROM node:14.15.4-stretch AS builder
+FROM node:14.17.0-stretch AS builder
 
 WORKDIR /home/app
 
@@ -22,16 +22,23 @@ RUN yarn run build
 
 CMD ["yarn", "run", "dev"]
 
-FROM node:14.15.4-alpine3.12
+FROM node:14.17.0-alpine3.13
 
 WORKDIR /home/app
 
 COPY --from=builder /home/app/dist .
+# copy yarn cache to allow yarn install to rerun offline
+ARG YARN_CACHE_PATH=/usr/local/share/.cache/yarn/v6
+COPY --from=builder ${YARN_CACHE_PATH} ${YARN_CACHE_PATH}
 
-RUN npm prune --production \
+# TODO: fix this by migrating to yarn 2 : https://github.com/yarnpkg/yarn/issues/6373#issuecomment-760068356
+RUN node -e "const package = require('./package.json'); delete package.devDependencies; require('fs').writeFileSync('package.json', JSON.stringify(package, null, 2));"
+
+RUN yarn install --offline \
   && rm -rf test \
-  && find . -type f -name "*.d.ts" -exec rm {} \;
-
-RUN mv src dist
+  && rm yarn.lock \
+  && find . -type f -name "*.d.ts" -exec rm {} \; \
+  && mv src dist \
+  && rm -rf ${YARN_CACHE_PATH}
 
 CMD ["node", "dist/index.js"]
