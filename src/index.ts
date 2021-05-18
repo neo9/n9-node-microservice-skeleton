@@ -10,12 +10,11 @@ import { Express } from 'express';
 import fastSafeStringify from 'fast-safe-stringify';
 import { Server } from 'http';
 import { Db } from 'mongodb';
-import n9NodeRouting, { N9NodeRouting } from 'n9-node-routing';
+import n9NodeRouting, { N9NodeRouting, Container } from 'n9-node-routing';
 import { join } from 'path';
 // Add source map supports
 // tslint:disable:no-import-side-effect
 import 'source-map-support/register';
-import { Container } from 'typedi';
 import { Conf } from './conf/index.models';
 
 // Start method
