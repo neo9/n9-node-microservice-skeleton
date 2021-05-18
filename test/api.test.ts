@@ -19,7 +19,7 @@ ava.serial('GET / => n9-node-microservice-skeleton', async (t: ExecutionContext)
 	t.is(body, 'n9-node-microservice-skeleton');
 	t.is(stderr.length, 0, `Request has errors: ${JSON.stringify(stderr)}`);
 	t.true(stdout.length > 0, 'Request had no success message');
-	t.true(stdout.join('\n').includes('"path":"/"'));
+	t.true(stdout.join('\n').includes(' GET / 200 '));
 });
 
 ava.serial('GET /ping => pong-db', async (t: ExecutionContext) => {
@@ -28,7 +28,7 @@ ava.serial('GET /ping => pong-db', async (t: ExecutionContext) => {
 	t.is(stderr.length, 0, `Request has errors: ${JSON.stringify(stderr)}`);
 	t.not(stdout.length, 0, 'Request had no success message');
 	t.true(stdout.length > 0, 'Request had no success message');
-	t.true(stdout.join('\n').includes('"path":"/ping"'));
+	t.true(stdout.join('\n').includes(' GET /ping 200 '));
 });
 
 ava('GET /routes => 1 routes', async (t: ExecutionContext) => {

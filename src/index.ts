@@ -71,6 +71,7 @@ async function start(
 				dbs: pingDbs,
 			},
 		},
+		enableLogFormatJSON: conf.enableLogFormatJSON,
 		openapi: conf.openapi,
 		shutdown: {
 			...conf.shutdown,

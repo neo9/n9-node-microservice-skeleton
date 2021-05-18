@@ -11,7 +11,7 @@ import * as stdMocks from 'std-mocks';
 import { Conf } from '../../src/conf/index.models';
 import { UserDetails } from '../../src/modules/users/users.models';
 
-const print = false;
+const print = true;
 
 export interface TestContext {
 	mongodServer: MongoMemoryServer;
@@ -69,7 +69,7 @@ export async function put<T>(
 	return await wrapLogs<T>(httpClient.put<T>(url(path), body));
 }
 
-export const startAPI = async () => {
+export const startAPI = async (confOverride?: Conf) => {
 	stdMocks.use({ print });
 	// Set env to 'test'
 	process.env.NODE_ENV = 'test';
@@ -83,9 +83,14 @@ export const startAPI = async () => {
 	});
 	const mongoConnectionString = await context.mongodServer.getConnectionString();
 	const { server, db, conf } = await src({
+		log: {
+			formatJSON: false,
+		},
+		enableLogFormatJSON: false,
 		mongo: {
 			url: mongoConnectionString,
 		},
+		...confOverride,
 	});
 
 	// Add variables to t.context

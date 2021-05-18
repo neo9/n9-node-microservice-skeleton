@@ -4,11 +4,12 @@ import { MongoClientOptions } from 'mongodb';
 import { N9NodeRouting } from 'n9-node-routing';
 
 export interface Conf extends N9ConfBaseConf {
-	// n9-node-micro config
+	// n9-node-routing config
 	http?: N9NodeRouting.HttpOptions;
 	openapi?: N9NodeRouting.SwaggerOptions;
 	log?: N9Log.Options;
 	shutdown?: N9NodeRouting.ShutdownOptions;
+	enableLogFormatJSON?: boolean;
 
 	// Custom config
 	mongo?: {
