@@ -1,13 +1,11 @@
-/* tslint:disable:ordered-imports */
-import 'reflect-metadata';
-import { useContainer } from 'class-validator';
-import { Container } from 'typedi';
-useContainer(Container);
-
-import { join } from 'path';
 import n9NodeConf from '@neo9/n9-node-conf';
-import { Conf } from './conf/index.models';
+import { Container, useContainer } from 'n9-node-routing';
 import { generateDocumentationJsonToFile } from 'n9-node-routing/dist/src/generate-documentation-json';
+import { join } from 'path';
+
+import { Conf } from './conf/index.models';
+
+useContainer(Container);
 
 function start(): void {
 	// Load project conf

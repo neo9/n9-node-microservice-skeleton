@@ -1,20 +1,20 @@
-// tslint:disable:ordered-imports
-import { context, get, post, startAPI } from './fixtures/helpers';
-import { cb, N9JSONStreamResponse } from '@neo9/n9-node-utils';
-import ava, { ExecutionContext } from 'ava';
-import { UserDetails, UserListItem } from '../src/modules/users/users.models';
+/* eslint-disable simple-import-sort/imports,import/order */
+import { context, get, post, startAPI, stopAPI } from './fixtures/helpers';
+import ava, { Assertions } from 'ava';
+import { UserListItem, UserDetails, UserRequestCreate } from '../src/modules/users/users.models';
+import { N9JSONStreamResponse } from '@neo9/n9-node-utils';
 
 /*
  ** Start API
  */
 ava.before('Start API', async () => {
-	await startAPI();
+	await startAPI({}, true);
 });
 
 /*
  ** Information routes
  */
-ava.serial('GET / => n9-node-microservice-skeleton', async (t: ExecutionContext) => {
+ava.serial('GET / => n9-node-microservice-skeleton', async (t: Assertions) => {
 	const { body, stdout, stderr } = await get<string>('/', 'text');
 	t.is(body, 'n9-node-microservice-skeleton');
 	t.is(stderr.length, 0, `Request has errors: ${JSON.stringify(stderr)}`);
@@ -22,7 +22,7 @@ ava.serial('GET / => n9-node-microservice-skeleton', async (t: ExecutionContext)
 	t.true(stdout.join('\n').includes(' GET / 200 '));
 });
 
-ava.serial('GET /ping => pong-db', async (t: ExecutionContext) => {
+ava.serial('GET /ping => pong-db', async (t: Assertions) => {
 	const { body, stdout, stderr } = await get<string>('/ping', 'text');
 	t.true(body.includes('pong-db'));
 	t.is(stderr.length, 0, `Request has errors: ${JSON.stringify(stderr)}`);
@@ -31,12 +31,12 @@ ava.serial('GET /ping => pong-db', async (t: ExecutionContext) => {
 	t.true(stdout.join('\n').includes(' GET /ping 200 '));
 });
 
-ava('GET /routes => 1 routes', async (t: ExecutionContext) => {
+ava('GET /routes => 1 routes', async (t: Assertions) => {
 	const { body } = await get<any[]>('/routes');
 	t.is(body.length, 1);
 });
 
-ava.serial('GET /404 => 404 status code', async (t: ExecutionContext) => {
+ava.serial('GET /404 => 404 status code', async (t: Assertions) => {
 	const { err } = await get('/404');
 	t.is(err.status, 404);
 	t.is(err.message, 'not-found');
@@ -46,12 +46,13 @@ ava.serial('GET /404 => 404 status code', async (t: ExecutionContext) => {
 /*
  ** modules/users/
  */
-ava('POST /users => 200 with good params', async (t: ExecutionContext) => {
-	const { body, err } = await post<UserDetails>('/users', {
+ava('POST /users => 200 with good params', async (t: Assertions) => {
+	const { body, err } = await post<UserRequestCreate, UserDetails>('/users', {
 		firstName: 'Neo',
 		lastName: 'Nine',
 		email: 'neo@neo9.fr',
 		password: 'password-long',
+		someData: undefined,
 	});
 	t.falsy(err, 'Error is empty');
 	t.regex(body._id, /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i, 'Good _id format');
@@ -66,8 +67,8 @@ ava('POST /users => 200 with good params', async (t: ExecutionContext) => {
 	});
 });
 
-ava('POST /users => 400 with wrong params', async (t: ExecutionContext) => {
-	const { err } = await post<UserDetails>('/users', {
+ava('POST /users => 400 with wrong params', async (t: Assertions) => {
+	const { err } = await post<Partial<UserRequestCreate>, UserDetails>('/users', {
 		firstName: 'Neo',
 		email: `newameil${new Date().getTime()}@test.com`,
 		password: 'azerty',
@@ -76,7 +77,7 @@ ava('POST /users => 400 with wrong params', async (t: ExecutionContext) => {
 	t.is(err.context.srcError.code, 'BadRequestError', 'body code : BadRequestError');
 });
 
-ava('POST /users => 409 with user already exists', async (t: ExecutionContext) => {
+ava('POST /users => 409 with user already exists', async (t: Assertions) => {
 	const { err } = await post('/users', {
 		firstName: 'Neo',
 		lastName: 'Nine',
@@ -90,27 +91,27 @@ ava('POST /users => 409 with user already exists', async (t: ExecutionContext) =
 /*
  ** modules/users/
  */
-ava('GET /users/:id => 404 with user not found', async (t: ExecutionContext) => {
+ava('GET /users/:id => 404 with user not found', async (t: Assertions) => {
 	const headers = { session: context.session };
 	const { err } = await get('/users/012345678901234567890123', 'json', {}, headers);
 	t.is(err.status, 404);
 	t.is(err.context.srcError.code, 'user-not-found');
 });
 
-ava('GET /users/:id => 200 with user found', async (t: ExecutionContext) => {
+ava('GET /users/:id => 200 with user found', async (t: Assertions) => {
 	const headers = { session: context.session };
 	const { body } = await get<UserDetails>(`/users/${context.user._id}`, 'json', {}, headers);
 	t.is(body.email, context.user.email);
 });
 
-ava('GET /users => 200 with 10 users', async (t: ExecutionContext) => {
+ava('GET /users => 200 with 10 users', async (t: Assertions) => {
 	const headers = { session: context.session };
 	const { body } = await get<N9JSONStreamResponse<UserListItem>>(`/users`, 'json', {}, headers);
 	t.is(body.count, 10);
 	t.is((body.items[0] as UserDetails).password, undefined, 'password is not in the userListItem');
 });
 
-ava('GET /users => 400 with page size too big', async (t: ExecutionContext) => {
+ava('GET /users => 400 with page size too big', async (t: Assertions) => {
 	const headers = { session: context.session };
 	const { err } = await get<N9JSONStreamResponse<UserListItem>>(
 		`/users`,
@@ -125,5 +126,5 @@ ava('GET /users => 400 with page size too big', async (t: ExecutionContext) => {
  ** Stop API
  */
 ava.after('Stop server', async () => {
-	await cb(context.server.close.bind(context.server));
+	await stopAPI();
 });

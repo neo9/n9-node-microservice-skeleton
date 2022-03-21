@@ -1,20 +1,21 @@
-/* tslint:disable:ordered-imports */
+// eslint-disable-next-line import/no-extraneous-dependencies
 import 'reflect-metadata';
+// Add source map supports
+import 'source-map-support/register';
 
 import { MongoUtils } from '@neo9/n9-mongo-client';
 import n9NodeConf from '@neo9/n9-node-conf';
-// Dependencies
-import n9NodeLog from '@neo9/n9-node-log';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import * as bodyParser from 'body-parser';
-import { Express } from 'express';
+import type { Express, RequestHandler } from 'express';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import fastSafeStringify from 'fast-safe-stringify';
 import { Server } from 'http';
-import { Db } from 'mongodb';
-import n9NodeRouting, { N9NodeRouting, Container } from 'n9-node-routing';
+import type { Db } from 'mongodb';
+// Dependencies
+import n9NodeRouting, { Container, N9Log, N9NodeRouting } from 'n9-node-routing';
 import { join } from 'path';
-// Add source map supports
-// tslint:disable:no-import-side-effect
-import 'source-map-support/register';
+
 import { Conf } from './conf/index.models';
 
 // Start method
@@ -22,25 +23,29 @@ async function start(
 	confOverride: Partial<Conf> = {},
 ): Promise<{ server: Server; db: Db; conf: Conf }> {
 	// Load project conf & set as global
-	const conf = (global.conf = n9NodeConf({
+	const conf = n9NodeConf({
 		path: join(__dirname, 'conf'),
 		extendConfig: {
-			key: 'starterApi',
 			path: {
-				relative: './env/env.yaml',
+				relative: './env/env.json',
 			},
+			key: 'starterApi',
 		},
 		override: {
 			value: confOverride,
 		},
-	}) as Conf);
+	}) as Conf;
+	global.conf = conf;
 
-	const log = (global.log = n9NodeLog(conf.name, global.conf.log));
+	// Load logging system
+	const log = new N9Log(conf.name, conf.log);
+	global.log = log;
 	// Load loaded configuration
 	log.info(`Conf loaded: ${conf.env}`);
 
 	// Profile startup boot time
 	log.profile('startup');
+
 	// print app infos
 	const initialInfos = `${conf.name} version : ${conf.version} env: ${conf.env}`;
 	log.info('-'.repeat(initialInfos.length));
@@ -69,8 +74,8 @@ async function start(
 		path: join(__dirname, 'modules'),
 		http: {
 			...conf.http,
-			beforeRoutingControllerLaunchHook: async (app2: Express) => {
-				app2.use(bodyParser.json({ limit: conf.bodyParser?.limit }));
+			beforeRoutingControllerLaunchHook: (app2: Express) => {
+				app2.use(bodyParser.json({ limit: conf.bodyParser?.limit }) as RequestHandler);
 			},
 			ping: {
 				dbs: pingDbs,

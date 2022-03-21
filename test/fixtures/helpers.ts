@@ -1,87 +1,60 @@
-// tslint:disable:ordered-imports
-import src from '../../src';
-import n9NodeLog from '@neo9/n9-node-log';
-import { cb, N9Error } from '@neo9/n9-node-utils';
-import { Server } from 'http';
-import { Db } from 'mongodb';
+import { MongoUtils, StringMap } from '@neo9/n9-mongo-client';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { N9HttpClient } from 'n9-node-routing';
+import { cb, Container, N9Error, N9HttpClient, N9Log, waitFor } from 'n9-node-routing';
 import { join } from 'path';
 import * as stdMocks from 'std-mocks';
+import * as Mockito from 'ts-mockito';
+
+import src from '../../src';
 import { Conf } from '../../src/conf/index.models';
-import { UserDetails } from '../../src/modules/users/users.models';
 
-const print = true;
+export const print = true;
+export const context: { mongodServer?: MongoMemoryServer; [key: string]: any } = {};
 
-export interface TestContext {
-	mongodServer: MongoMemoryServer;
-	server: Server;
-	session: string;
-	user: UserDetails;
-	conf: Conf;
-	db: Db;
-}
-export let context: Partial<TestContext> = {};
+export const cleanDb = async (): Promise<void> => {
+	const collections = await context.db.collections();
+	for (const collection of collections) {
+		await collection.deleteMany({});
+	}
+};
 
-/* istanbul ignore next */
-const url = (path: string = '/') => `http://localhost:${context.conf.http.port}${join('/', path)}`;
-
-export async function get<T extends string | object = object>(
-	path: string,
-	responseType: 'text' | 'json' = 'json',
-	queryParams?: object,
-	headers?: object,
-): Promise<{
-	body: T;
-	err: N9Error;
-	stdout: string[];
-	stderr: string[];
-}> {
-	const httpClient = getHttpClient(responseType);
-	return await wrapLogs<T>(httpClient.get<T>(url(path), queryParams, headers));
-}
-
-// istanbul ignore next
-export async function post<T>(
-	path: string,
-	body: any,
-): Promise<{
-	body: T;
-	err: N9Error;
-	stdout: string[];
-	stderr: string[];
-}> {
-	const httpClient = getHttpClient('json');
-	return await wrapLogs<T>(httpClient.post<T>(url(path), body));
-}
-
-// istanbul ignore next
-export async function put<T>(
-	path: string,
-	body: any,
-): Promise<{
-	body: T;
-	err: N9Error;
-	stdout: string[];
-	stderr: string[];
-}> {
-	const httpClient = getHttpClient('json');
-	return await wrapLogs<T>(httpClient.put<T>(url(path), body));
-}
-
-export const startAPI = async (confOverride?: Conf) => {
+export const startAPI = async (confOverride?: Conf, doCleanDb: boolean = true): Promise<void> => {
 	stdMocks.use({ print });
 	// Set env to 'test'
 	process.env.NODE_ENV = 'test';
 	// Start again (to init files)
-
-	context.mongodServer = new MongoMemoryServer({
+	context.mongodServer = await MongoMemoryServer.create({
 		binary: {
 			version: '4.2.2',
 		},
-		// debug: true,
 	});
-	const mongoConnectionString = await context.mongodServer.getConnectionString();
+
+	let mongoConnectionString;
+	try {
+		global.log = new N9Log('mongo');
+		await MongoUtils.connect('mongodb://127.0.0.1:27017', {});
+		global.log.warn(`Using local MongoDB`);
+	} catch (e) {
+		if (e.name === 'MongoNetworkError') {
+			global.log.warn(`Using MongoDB in memory`);
+			// no classic mongodb available, so use one in memory
+			context.mongodServer = await MongoMemoryServer.create({
+				binary: {
+					version: '4.2.2',
+				},
+			});
+
+			mongoConnectionString = context.mongodServer.getUri();
+		} else {
+			throw e;
+		}
+	}
+	if (doCleanDb) {
+		await MongoUtils.connect(mongoConnectionString || 'mongodb://127.0.0.1:27017', {});
+		context.db = global.db;
+		await cleanDb();
+	}
+	stdMocks.use({ print });
 	const { server, db, conf } = await src({
 		log: {
 			formatJSON: false,
@@ -93,7 +66,7 @@ export const startAPI = async (confOverride?: Conf) => {
 		...confOverride,
 	});
 
-	// Add variables to t.context
+	// Add variables to context
 	context.server = server;
 	context.db = db;
 	context.conf = conf;
@@ -102,12 +75,54 @@ export const startAPI = async (confOverride?: Conf) => {
 	stdMocks.restore();
 };
 
-export const stopAPI = async () => {
+export const stopAPI = async (): Promise<void> => {
 	await cb(context.server.close.bind(context.server));
 	await context.mongodServer.stop();
 };
 
-async function wrapLogs<T>(
+export const waitForHelper = async (durationMs: number): Promise<void> => {
+	global.log.info(`Wait for ${durationMs / 1_000} s`);
+	await waitFor(durationMs);
+};
+
+/* istanbul ignore next */
+const url = (path: string | string[] = '/'): string | string[] => {
+	if (Array.isArray(path)) return [`http://localhost:${context.conf.http.port}`, ...path];
+	return `http://localhost:${context.conf.http.port}${join('/', path)}`;
+};
+
+type AnyConstructor = new (...args: any[]) => any;
+// helper that takes a list of constructors and returns a list of instances
+export function inject<T extends AnyConstructor[]>(
+	...argsDefinitions: T
+): {
+	[K in keyof T]: T[K] extends AnyConstructor ? InstanceType<T[K]> : never;
+};
+export function inject<T extends any[]>(...argsDefinitions: T): any[] {
+	const args = argsDefinitions.map((argsDefinition) => {
+		return Container.get(argsDefinition);
+	});
+	return args as any;
+}
+
+export const getMockedName = (constr: AnyConstructor): string => `__mock__${constr.name}__`;
+
+// override a service in the container
+export function overrideService<T extends AnyConstructor>(serviceClass: T, instance: any): void {
+	Container.remove(serviceClass);
+	Container.set(serviceClass, instance);
+}
+
+// mock a service, register the service instance and the mock, and return the mocked service class
+export function mockService<T extends AnyConstructor>(serviceClass: T): InstanceType<T> {
+	const mockedServiceClass = Mockito.mock(serviceClass);
+	Container.remove(serviceClass);
+	Container.set(serviceClass, Mockito.instance(mockedServiceClass));
+	Container.set(getMockedName(serviceClass), mockedServiceClass);
+	return mockedServiceClass;
+}
+
+export async function wrapLogs<T>(
 	apiCall: Promise<T>,
 ): Promise<{ body: T; err: N9Error; stdout: string[]; stderr: string[] }> {
 	// Store logs output
@@ -120,7 +135,7 @@ async function wrapLogs<T>(
 	} catch (error) {
 		err = error;
 	}
-	// Get logs ouput & check logs
+	// Get logs output & check logs
 	const { stdout, stderr } = stdMocks.flush();
 	// Restore logs output
 	stdMocks.restore();
@@ -128,5 +143,80 @@ async function wrapLogs<T>(
 }
 
 function getHttpClient(responseType: 'text' | 'json'): N9HttpClient {
-	return new N9HttpClient(global.log ?? n9NodeLog('test'), { responseType });
+	return new N9HttpClient(global.log ?? new N9Log('test'), { responseType });
+}
+
+export async function get<T extends string | object = object>(
+	path: string,
+	responseType: 'text' | 'json' = 'json',
+	queryParams?: StringMap<any>,
+	headers?: StringMap<any>,
+): Promise<{
+	body: T;
+	err: N9Error;
+	stdout: string[];
+	stderr: string[];
+}> {
+	const httpClient = getHttpClient(responseType);
+	return await wrapLogs<T>(httpClient.get<T>(url(path), queryParams, headers));
+}
+
+export async function post<B = any, T = object>(
+	path: string | string[],
+	body: B,
+	queryParams?: StringMap<any>,
+	headers?: StringMap<any>,
+): Promise<{
+	body: T;
+	err: N9Error;
+	stdout: string[];
+	stderr: string[];
+}> {
+	const httpClient = getHttpClient('json');
+	return await wrapLogs<T>(
+		httpClient.post<T>(url(path), body, queryParams, {
+			session: JSON.stringify({ userId: '0' }),
+			...headers,
+		}),
+	);
+}
+
+export async function put<B = any, T = object>(
+	path: string | string[],
+	body: B,
+	queryParams?: StringMap<any>,
+	headers?: StringMap<any>,
+): Promise<{
+	body: T;
+	err: N9Error;
+	stdout: string[];
+	stderr: string[];
+}> {
+	const httpClient = getHttpClient('json');
+	return await wrapLogs<T>(
+		httpClient.put<T>(url(path), body, queryParams, {
+			session: JSON.stringify({ userId: '0' }),
+			...headers,
+		}),
+	);
+}
+
+export async function patch<B = any, T = object>(
+	path: string | string[],
+	body?: B,
+	queryParams?: StringMap<any>,
+	headers?: StringMap<any>,
+): Promise<{
+	body: T;
+	err: N9Error;
+	stdout: string[];
+	stderr: string[];
+}> {
+	const httpClient = getHttpClient('json');
+	return await wrapLogs<T>(
+		httpClient.patch<T>(url(path), body, queryParams, {
+			session: JSON.stringify({ userId: '0' }),
+			...headers,
+		}),
+	);
 }

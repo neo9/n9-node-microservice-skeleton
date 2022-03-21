@@ -1,6 +1,5 @@
-import { Exclude, Expose, Transform } from 'class-transformer';
-import { IsInt, IsOptional, Max, Min } from 'class-validator';
 import * as _ from 'lodash';
+import { Exclude, Expose, IsInt, IsOptional, Max, Min, Transform } from 'n9-node-routing';
 
 @Exclude()
 export class SizeValidation {

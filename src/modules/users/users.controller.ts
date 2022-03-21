@@ -1,6 +1,4 @@
-import { N9Log } from '@neo9/n9-node-log';
-import { N9Error, N9JSONStream } from '@neo9/n9-node-utils';
-import { Response } from 'express';
+import type { Response } from 'express';
 import {
 	Acl,
 	Authorized,
@@ -8,6 +6,9 @@ import {
 	Get,
 	Inject,
 	JsonController,
+	N9Error,
+	N9JSONStream,
+	N9Log,
 	OpenAPI,
 	Param,
 	Post,
@@ -17,6 +18,7 @@ import {
 	Service,
 	Session,
 } from 'n9-node-routing';
+
 import { SizeValidation } from '../../models/size-validation.models';
 import { TokenContent } from '../../models/token-content.models';
 import { UserDetails, UserListItem, UserRequestCreate } from './users.models';
@@ -36,11 +38,13 @@ export class UsersController {
 	@OpenAPI({
 		description: 'Create one user',
 		responses: {
+			// eslint-disable-next-line @typescript-eslint/naming-convention
 			400: {
 				description: 'Bad Request',
 			},
+			// eslint-disable-next-line @typescript-eslint/naming-convention
 			409: {
-				desciption: 'User email already exist',
+				description: 'User email already exist',
 			},
 		},
 	})
@@ -83,12 +87,12 @@ export class UsersController {
 
 	@Get('/')
 	public async getUsers(
-		@QueryParam('page') page: number = 0,
-		@QueryParam('size') size: number = 10,
 		@QueryParams() qp: SizeValidation,
 		@Res() res: Response,
+		@QueryParam('page') page: number = 0,
+		@QueryParam('size') size: number = 10,
 	): Promise<N9JSONStream<UserListItem>> {
-		const users = await this.usersService.find({}, page, size);
+		const users = this.usersService.find({}, page, size);
 		return users.pipe(
 			new N9JSONStream({
 				res,

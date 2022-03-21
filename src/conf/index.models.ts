@@ -1,7 +1,7 @@
+import { StringMap } from '@neo9/n9-mongo-client';
 import { N9ConfBaseConf } from '@neo9/n9-node-conf';
-import { N9Log } from '@neo9/n9-node-log';
-import { MongoClientOptions } from 'mongodb';
-import { N9NodeRouting } from 'n9-node-routing';
+import type { MongoClientOptions } from 'mongodb';
+import { N9Log, N9NodeRouting } from 'n9-node-routing';
 
 export interface Conf extends N9ConfBaseConf {
 	// n9-node-routing config
@@ -19,7 +19,7 @@ export interface Conf extends N9ConfBaseConf {
 	bodyParser?: {
 		limit?: string;
 	};
-	apis?: {};
+	apis?: StringMap<any>;
 	metrics?: {
 		isEnabled?: boolean;
 		waitDurationMs?: number;
