@@ -1,3 +1,38 @@
+## [0.1.2](https://github.com/neo9/n9-node-microservice-skeleton/compare/0.1.1...0.1.2) (2022-03-21)
+
+
+### conf
+
+* Add example of extended conf ([5eb7da4](https://github.com/neo9/n9-node-microservice-skeleton/commit/5eb7da4e39b917a7d4f150490bd8aff34a8b2b53))
+
+### dev
+
+* Decrease duration before restart on dev ([d9b5a1f](https://github.com/neo9/n9-node-microservice-skeleton/commit/d9b5a1f6b7d2ce6316149bf45349986d6f6f4a6e))
+
+### docker
+
+* Upgrade to latest lts version 14.17.0 and fix devDependencies clean ([edf5ef0](https://github.com/neo9/n9-node-microservice-skeleton/commit/edf5ef0821b90ca7ce85cdb786820f250a3c02b6))
+
+### imports
+
+* Use new n9-node-routing import ([019f607](https://github.com/neo9/n9-node-microservice-skeleton/commit/019f60774675e879bc6bb440e3fd6b68b544de41))
+
+### tests
+
+* Use human log format for tests ([5a8cf72](https://github.com/neo9/n9-node-microservice-skeleton/commit/5a8cf7208d22ad5e8b62ed83d5848a9bf76b0f4f))
+
+### yarn
+
+* Fix security by updating dependencies ([30b0e16](https://github.com/neo9/n9-node-microservice-skeleton/commit/30b0e16afc98202c1f8d4a138da791485178e194))
+* Fix security issue and dependencies for dependencies urijs tar ([3fe2839](https://github.com/neo9/n9-node-microservice-skeleton/commit/3fe2839ec7877b52193639cd36cf2035c201f722))
+* Fix security issue by upgrading dependency color-string ([1888591](https://github.com/neo9/n9-node-microservice-skeleton/commit/1888591aa581fad4a2062224b28e9ce876ec60ad))
+* Upgrade all dependencies and nodejs to version 16 ([dfcdfc6](https://github.com/neo9/n9-node-microservice-skeleton/commit/dfcdfc692ee5b61fb42a19d506fbb99df2efb0f9))
+* Upgrade all transitive dependencies ([ddffd92](https://github.com/neo9/n9-node-microservice-skeleton/commit/ddffd920f7157e046beb1899e028d5e0a7645bba))
+* Upgrade deep dependencies to fix security issues ([6948d99](https://github.com/neo9/n9-node-microservice-skeleton/commit/6948d99401b52f6cbc62e83e03751ecbec2b1606))
+* Upgrade dependencies ([5f1d74b](https://github.com/neo9/n9-node-microservice-skeleton/commit/5f1d74b0e851de95f265c9bdbec8e4a1833b420a))
+* Upgrade n9-node-routing to latest ([ebb260f](https://github.com/neo9/n9-node-microservice-skeleton/commit/ebb260f9d6b745db2ea2e5cefcf20c307520f68b))
+* Upgrade n9-node-routing to latest ([4c67fdc](https://github.com/neo9/n9-node-microservice-skeleton/commit/4c67fdcc434f5baddf7ede321bdf09daaeca3be6))
+
 ## [0.1.1](https://github.com/neo9/n9-node-microservice-skeleton/compare/0.1.0...0.1.1) (2021-01-15)
 
 
