@@ -4,7 +4,7 @@ import { cb, Container, N9Error, N9HttpClient, N9Log } from 'n9-node-routing';
 import { join } from 'path';
 import * as stdMocks from 'std-mocks';
 import * as Mockito from 'ts-mockito';
-import { PartialDeep } from 'type-fest';
+import { Class, PartialDeep } from 'type-fest';
 
 import { Configuration } from '../../src/conf/models/configuration.models';
 import { start } from '../../src/start';
@@ -88,30 +88,29 @@ const url = (path: string | string[] = '/'): string | string[] => {
 	return `http://localhost:${httpPort}${join('/', path)}`;
 };
 
-type AnyConstructor = new (...args: any[]) => any;
-// helper that takes a list of constructors and returns a list of instances
-export function inject<T extends AnyConstructor[]>(
-	...argsDefinitions: T
+// helper that takes a list of class and returns a list of instances
+export function inject<T extends Class[]>(
+	...services: T
 ): {
-	[K in keyof T]: T[K] extends AnyConstructor ? InstanceType<T[K]> : never;
+	[K in keyof T]: T[K] extends Class ? InstanceType<T[K]> : never;
 };
-export function inject<T extends any[]>(...argsDefinitions: T): any[] {
-	const args = argsDefinitions.map((argsDefinition) => {
-		return Container.get(argsDefinition);
+export function inject<T extends any[]>(...manyServiceClass: T): any[] {
+	const args = manyServiceClass.map((serviceClass) => {
+		return Container.get(serviceClass);
 	});
 	return args as any;
 }
 
-export const getMockedName = (constr: AnyConstructor): string => `__mock__${constr.name}__`;
+export const getMockedName = (serviceClass: Class): string => `__mock__${serviceClass.name}__`;
 
 // override a service in the container
-export function overrideService<T extends AnyConstructor>(serviceClass: T, instance: any): void {
+export function overrideService<T extends Class>(serviceClass: T, instance: any): void {
 	Container.remove(serviceClass);
 	Container.set(serviceClass, instance);
 }
 
 // mock a service, register the service instance and the mock, and return the mocked service class
-export function mockService<T extends AnyConstructor>(serviceClass: T): InstanceType<T> {
+export function mockService<T extends Class>(serviceClass: T): InstanceType<T> {
 	const mockedServiceClass = Mockito.mock(serviceClass);
 	Container.remove(serviceClass);
 	Container.set(serviceClass, Mockito.instance(mockedServiceClass));
