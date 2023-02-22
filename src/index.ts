@@ -3,96 +3,59 @@ import 'reflect-metadata';
 // Add source map supports
 import 'source-map-support/register';
 
-import { MongoUtils } from '@neo9/n9-mongo-client';
-import n9NodeConf from '@neo9/n9-node-conf';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import * as bodyParser from 'body-parser';
-import type { Express, RequestHandler } from 'express';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import fastSafeStringify from 'fast-safe-stringify';
 import { Server } from 'http';
 import type { Db } from 'mongodb';
-// Dependencies
-import n9NodeRouting, { Container, N9Log, N9NodeRouting } from 'n9-node-routing';
-import { join } from 'path';
+import n9NodeRouting, { Container, N9NodeRouting } from 'n9-node-routing';
+import { PartialDeep } from 'type-fest';
 
-import { Conf } from './conf/index.models';
+import { Configuration } from './conf/models/configuration.models';
 
-// Start method
 async function start(
-	confOverride: Partial<Conf> = {},
-): Promise<{ server: Server; db: Db; conf: Conf }> {
-	// Load project conf & set as global
-	const conf = n9NodeConf({
-		path: join(__dirname, 'conf'),
-		extendConfig: {
-			path: {
-				relative: './env/env.json',
-			},
-			key: 'starterApi',
-		},
-		override: {
-			value: confOverride,
-		},
-	}) as Conf;
-	global.conf = conf;
-
-	// Load logging system
-	const log = new N9Log(conf.name, conf.log);
-	global.log = log;
-	// Load loaded configuration
-	log.info(`Conf loaded: ${conf.env}`);
-
-	// Profile startup boot time
-	log.profile('startup');
-
-	// print app infos
-	const initialInfos = `${conf.name} version : ${conf.version} env: ${conf.env}`;
-	log.info('-'.repeat(initialInfos.length));
-	log.info(initialInfos);
-	log.info('-'.repeat(initialInfos.length));
-
-	// Connect to MongoDB
-	const db = await MongoUtils.connect(conf.mongo.url, conf.mongo.options);
-	Container.set('db', db);
-
-	const pingDbs = [
-		{
-			name: 'MongoDB',
-			thisArg: global.dbClient,
-			isConnected: global.dbClient.isConnected,
-		},
-	];
+	confOverride: PartialDeep<Configuration> = {},
+): Promise<{ server: Server; db: Db; conf: Configuration }> {
+	const pingDbs: N9NodeRouting.PingDb[] = [];
 	Container.set('pingDbs', pingDbs);
-
 	const callbacksBeforeShutdown: N9NodeRouting.CallbacksBeforeShutdown[] = [];
 	Container.set('callbacksBeforeShutdown', callbacksBeforeShutdown);
+	const callbacksOnShutdownSignalReceived: N9NodeRouting.CallbacksBeforeShutdown[] = [];
+	Container.set('callbacksOnShutdownSignalReceived', callbacksOnShutdownSignalReceived);
 
 	// Load modules
-	const { server } = await n9NodeRouting({
+	const { server, conf } = await n9NodeRouting({
 		hasProxy: true,
-		path: join(__dirname, 'modules'),
 		http: {
-			...conf.http,
-			beforeRoutingControllerLaunchHook: (app2: Express) => {
-				app2.use(bodyParser.json({ limit: conf.bodyParser?.limit }) as RequestHandler);
-			},
 			ping: {
 				dbs: pingDbs,
 			},
 		},
-		enableLogFormatJSON: conf.enableLogFormatJSON,
-		openapi: conf.openapi,
 		shutdown: {
-			...conf.shutdown,
 			callbacksBeforeShutdown,
+			callbacksOnShutdownSignalReceived,
 		},
-		prometheus: conf.metrics.isEnabled ? {} : undefined,
+		firstSequentialInitFileNames: [
+			'mongo.init.ts', // We need to did this init before all others because some init files need mongo connection or some services/repositories that need mongo connection
+		],
+		conf: {
+			n9NodeConf: {
+				extendConfig: {
+					path: {
+						relative: './env/env.yaml',
+					},
+					key: 'skeletonApi', // todo on init skeleton: Rename this key // todo duplicate this todo
+				},
+				override: {
+					value: confOverride,
+				},
+			},
+			validation: {
+				isEnabled: true,
+				classType: Configuration,
+			},
+		},
 	});
 
-	// Log the startup time
-	log.profile('startup');
-	// Return server and more for testing
 	return { server, db, conf };
 }
 

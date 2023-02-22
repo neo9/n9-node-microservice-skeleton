@@ -15,20 +15,25 @@ ava.before('Start API', async () => {
  ** Information routes
  */
 ava.serial('GET / => n9-node-microservice-skeleton', async (t: Assertions) => {
-	const { body, stdout, stderr } = await get<string>('/', 'text');
-	t.is(body, 'n9-node-microservice-skeleton');
+	const { body, stdout, stderr } = await get<{ name: string }>('/', 'json');
+	t.deepEqual(body, { name: 'n9-node-microservice-skeleton' });
 	t.is(stderr.length, 0, `Request has errors: ${JSON.stringify(stderr)}`);
 	t.true(stdout.length > 0, 'Request had no success message');
-	t.true(stdout.join('\n').includes(' GET / 200 '));
+	t.true(stdout.join('\n').includes('"path":"/"'));
+	t.true(stdout.join('\n').includes('"method":"GET"'));
+	t.true(stdout.join('\n').includes('"status":"200"'));
 });
 
 ava.serial('GET /ping => pong-db', async (t: Assertions) => {
-	const { body, stdout, stderr } = await get<string>('/ping', 'text');
-	t.true(body.includes('pong-db'));
+	const { body, stdout, stderr } = await get<string>('/ping', 'json');
+	const nbDbs = ['mongodb'].length;
+	t.deepEqual(body, { response: `pong-dbs-${nbDbs}` });
 	t.is(stderr.length, 0, `Request has errors: ${JSON.stringify(stderr)}`);
 	t.not(stdout.length, 0, 'Request had no success message');
 	t.true(stdout.length > 0, 'Request had no success message');
-	t.true(stdout.join('\n').includes(' GET /ping 200 '));
+	t.true(stdout.join('\n').includes('"path":"/ping"'));
+	t.true(stdout.join('\n').includes('"method":"GET"'));
+	t.true(stdout.join('\n').includes('"status":"200"'));
 });
 
 ava('GET /routes => 1 routes', async (t: Assertions) => {

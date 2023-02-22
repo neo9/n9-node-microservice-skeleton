@@ -4,9 +4,10 @@ import { cb, Container, N9Error, N9HttpClient, N9Log, waitFor } from 'n9-node-ro
 import { join } from 'path';
 import * as stdMocks from 'std-mocks';
 import * as Mockito from 'ts-mockito';
+import { PartialDeep } from 'type-fest';
 
 import src from '../../src';
-import { Conf } from '../../src/conf/index.models';
+import { Configuration } from '../../src/conf/models/configuration.models';
 
 export const print = true;
 export const context: { mongodServer?: MongoMemoryServer; [key: string]: any } = {};
@@ -18,7 +19,10 @@ export const cleanDb = async (): Promise<void> => {
 	}
 };
 
-export const startAPI = async (confOverride?: Conf, doCleanDb: boolean = true): Promise<void> => {
+export const startAPI = async (
+	confOverride?: PartialDeep<Configuration>,
+	doCleanDb: boolean = true,
+): Promise<void> => {
 	stdMocks.use({ print });
 	// Set env to 'test'
 	process.env.NODE_ENV = 'test';
@@ -56,10 +60,13 @@ export const startAPI = async (confOverride?: Conf, doCleanDb: boolean = true): 
 	}
 	stdMocks.use({ print });
 	const { server, db, conf } = await src({
-		log: {
-			formatJSON: false,
+		n9NodeRoutingOptions: {
+			logOptions: {
+				// make format to JSON due to incompatible between std-mocks and pino
+				formatJSON: true,
+			},
+			enableLogFormatJSON: true,
 		},
-		enableLogFormatJSON: false,
 		mongo: {
 			url: mongoConnectionString,
 		},
@@ -87,8 +94,9 @@ export const waitForHelper = async (durationMs: number): Promise<void> => {
 
 /* istanbul ignore next */
 const url = (path: string | string[] = '/'): string | string[] => {
-	if (Array.isArray(path)) return [`http://localhost:${context.conf.http.port}`, ...path];
-	return `http://localhost:${context.conf.http.port}${join('/', path)}`;
+	const httpPort = context.conf.n9NodeRoutingOptions.http.port;
+	if (Array.isArray(path)) return [`http://localhost:${httpPort}`, ...path];
+	return `http://localhost:${httpPort}${join('/', path)}`;
 };
 
 type AnyConstructor = new (...args: any[]) => any;
