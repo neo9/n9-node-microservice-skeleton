@@ -1,8 +1,12 @@
-import { Conf } from './index.models';
+import { PartialDeep } from 'type-fest';
 
-const conf: Conf = {
-	shutdown: {
-		waitDurationBeforeStop: 500,
+import { Configuration } from './models/configuration.models';
+
+const conf: PartialDeep<Configuration> = {
+	n9NodeRoutingOptions: {
+		shutdown: {
+			waitDurationBeforeStop: 500,
+		},
 	},
 };
 

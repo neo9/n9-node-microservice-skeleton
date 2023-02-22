@@ -1,15 +1,25 @@
-import { Conf } from './index.models';
+import { PartialDeep } from 'type-fest';
 
-const conf: Conf = {
-	http: {
-		port: process.env.PORT || 8080,
+import { Configuration } from './models/configuration.models';
+
+const conf: PartialDeep<Configuration> = {
+	n9NodeRoutingOptions: {
+		http: {
+			port: process.env.PORT || 8080,
+		},
 	},
 	mongo: {
-		url: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/app-name',
+		url: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/skeleton-api', // todo on init skeleton: Rename database name
 	},
-	metrics: {
-		isEnabled: true,
-		waitDurationMs: 30 * 1_000,
+	apis: {
+		myApiName1: {
+			url: 'http://my-api-name-1.com',
+			cacheDuration: 1000,
+		},
+		myApiName2: {
+			url: 'http://my-api-name-2.com',
+			bulkSize: 100,
+		},
 	},
 };
 
