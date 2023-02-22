@@ -1,0 +1,2 @@
+'*': 'prettier --write'
+'*.ts': 'eslint --fix'

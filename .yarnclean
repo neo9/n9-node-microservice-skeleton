@@ -44,3 +44,6 @@ wercker.yml
 
 # misc
 *.md
+
+# fix for lint staged (https://github.com/okonet/lint-staged/issues/1166, https://github.com/eemeli/yaml/issues/384)
+!**/yaml/dist/**/doc
