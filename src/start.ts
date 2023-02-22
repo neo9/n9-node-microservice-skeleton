@@ -36,7 +36,7 @@ export async function start(
 					path: {
 						relative: './env/env.yaml',
 					},
-					key: 'skeletonApi', // todo on init skeleton: Rename this key // todo duplicate this todo
+					key: 'skeletonApi', // todo on init skeleton: Rename this key (update also in ./env/env.yaml with same value)
 				},
 				override: {
 					value: confOverride,

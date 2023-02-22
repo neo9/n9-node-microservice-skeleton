@@ -6,7 +6,7 @@ async function start(): Promise<void> {
 		migrationScriptsFolderPath: path.join(__dirname, '../mongodb-migration-scripts'),
 		mongodbURI: process.env.MONGODB_URI
 			? process.env.MONGODB_URI
-			: `mongodb://${process.env.MONGO_URI || '127.0.0.1:27017/catalogue-master-api'}`,
+			: `mongodb://${process.env.MONGO_URI || '127.0.0.1:27017/skeleton-api'}`, // todo on init skeleton: Define your default db name
 		mongodbOptions: {
 			socketTimeoutMS: 15 * 60 * 1000, // 15 min
 		},

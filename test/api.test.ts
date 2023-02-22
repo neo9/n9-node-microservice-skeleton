@@ -14,8 +14,10 @@ ava.before('Start API', async () => {
 /*
  ** Information routes
  */
+// todo on init skeleton: replace n9-node-microservice-skeleton by api name
 ava.serial('GET / => n9-node-microservice-skeleton', async (t: Assertions) => {
 	const { body, stdout, stderr } = await get<{ name: string }>('/', 'json');
+	// todo on init skeleton: replace n9-node-microservice-skeleton by api name
 	t.deepEqual(body, { name: 'n9-node-microservice-skeleton' });
 	t.is(stderr.length, 0, `Request has errors: ${JSON.stringify(stderr)}`);
 	t.true(stdout.length > 0, 'Request had no success message');
