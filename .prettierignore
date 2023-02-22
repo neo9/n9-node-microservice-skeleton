@@ -49,6 +49,7 @@ $RECYCLE.BIN/
 
 # Coverage
 coverage
+coverage.lcov
 .nyc_output
 
 # Sonar

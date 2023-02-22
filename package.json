@@ -13,7 +13,7 @@
     "mongodb-migrate:docker": "node dist/mongodb-migration.js",
     "generate-openapi-documentation": "TS_NODE_FILES=true ts-node -- src/generate-openapi-documentation.ts",
     "generate-openapi-documentation-debug": "TS_NODE_FILES=true node -r ts-node/register --inspect-brk=0.0.0.0:10010 -- src/generate-openapi-documentation.ts",
-    "format": "prettier --write '{,@(src|test|mongodb-migration-scripts)/**/}*.*'",
+    "format": "prettier --write '**/*'",
     "lint": "eslint --config .eslintrc.yaml '{src,test}/**/*.ts'",
     "lint:apply": "npm run format && eslint --fix --config .eslintrc.yaml '{src,test}/**/*.ts'",
     "lint:verbose": "eslint --fix --config .eslintrc.yaml '{src,test}/**/*.ts' --format unix '{src,test}/**/*.ts'",
@@ -59,6 +59,7 @@
     "conventional-changelog-cli": "^2.2.2",
     "copyfiles": "^2.4.1",
     "husky": "^4.3.8",
+    "lint-staged": "^13.1.2",
     "mongodb-memory-server": "^8.4.1",
     "nodemon": "^2.0.15",
     "nyc": "^15.1.0",
@@ -83,7 +84,7 @@
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "yarn run format && yarn run lint"
+      "pre-commit": "lint-staged"
     }
   }
 }
