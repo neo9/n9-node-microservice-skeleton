@@ -3,12 +3,9 @@ FROM node:16.14.2-bullseye AS builder
 
 WORKDIR /home/app
 
-#COPY ./.npmrc /home/app/.npmrc
-
 COPY package.json ./
 COPY yarn.lock ./
 RUN yarn install
-#RUN rm .npmrc
 
 COPY ./ ./
 

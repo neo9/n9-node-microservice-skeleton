@@ -1,6 +1,6 @@
 import { MongoUtils, StringMap } from '@neo9/n9-mongo-client';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { cb, Container, N9Error, N9HttpClient, N9Log, waitFor } from 'n9-node-routing';
+import { cb, Container, N9Error, N9HttpClient, N9Log } from 'n9-node-routing';
 import { join } from 'path';
 import * as stdMocks from 'std-mocks';
 import * as Mockito from 'ts-mockito';
@@ -27,11 +27,6 @@ export const startAPI = async (
 	// Set env to 'test'
 	process.env.NODE_ENV = 'test';
 	// Start again (to init files)
-	context.mongodServer = await MongoMemoryServer.create({
-		binary: {
-			version: '4.2.2',
-		},
-	});
 
 	let mongoConnectionString;
 	try {
@@ -58,7 +53,6 @@ export const startAPI = async (
 		context.db = global.db;
 		await cleanDb();
 	}
-	stdMocks.use({ print });
 	const { server, db, conf } = await start({
 		n9NodeRoutingOptions: {
 			logOptions: {
@@ -84,12 +78,7 @@ export const startAPI = async (
 
 export const stopAPI = async (): Promise<void> => {
 	await cb(context.server.close.bind(context.server));
-	await context.mongodServer.stop();
-};
-
-export const waitForHelper = async (durationMs: number): Promise<void> => {
-	global.log.info(`Wait for ${durationMs / 1_000} s`);
-	await waitFor(durationMs);
+	await context.mongodServer?.stop();
 };
 
 /* istanbul ignore next */
