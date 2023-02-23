@@ -54,30 +54,25 @@ export class UsersController {
 		@Session({ required: false }) session: TokenContent,
 		@Body() user: UserRequestCreate,
 	): Promise<UserDetails> {
-		// sanitize email to lowercase
 		user.email = user.email.toLowerCase();
-		// Check if user by email already exists
 		const userExists = await this.usersService.existsByEmail(user.email);
 
 		if (userExists) {
 			throw new N9Error('user-already-exists', 409);
 		}
 
-		// Add user to database
 		const userMongo = await this.usersService.create(
 			user,
 			session ? session.userId : 'no-auth-user',
 		);
 
 		delete userMongo.password;
-		// Send back the user created
 		return userMongo;
 	}
 
 	@Authorized()
 	@Get('/:id')
 	public async getUserById(@Param('id') userId: string): Promise<UserDetails> {
-		// Check if user exists
 		const user = await this.usersService.getById(userId);
 		if (!user) {
 			throw new N9Error('user-not-found', 404);

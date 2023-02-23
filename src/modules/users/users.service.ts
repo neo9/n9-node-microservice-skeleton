@@ -38,9 +38,7 @@ export class UsersService {
 	}
 
 	public async create(user: UserRequestCreate, creatorUserId: string): Promise<UserDetails> {
-		// Hash password
 		user.password = UsersService.hashPassword(user.password);
-		// Save to database
 		return await this.mongoClient.insertOne(user, creatorUserId);
 	}
 }
