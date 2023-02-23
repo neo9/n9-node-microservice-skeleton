@@ -1,6 +1,6 @@
-/* eslint-disable simple-import-sort/imports,import/order */
-import { get, startAPI, stopAPI } from './fixtures/helpers';
 import ava, { Assertions } from 'ava';
+
+import { get, startAPI, stopAPI } from './fixtures';
 
 /*
  ** Start API

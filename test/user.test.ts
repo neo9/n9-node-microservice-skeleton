@@ -2,7 +2,9 @@ import { N9JSONStreamResponse } from '@neo9/n9-node-utils';
 import ava, { Assertions } from 'ava';
 
 import { UserDetails, UserListItem, UserRequestCreate } from '../src/modules/users/users.models';
-import { context, get, post, startAPI, stopAPI } from './fixtures/helpers';
+import { get, post, startAPI, stopAPI } from './fixtures';
+
+const context: { user?: UserDetails; session?: string } = {};
 
 /*
  ** Start API
