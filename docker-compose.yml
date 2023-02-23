@@ -19,6 +19,7 @@ services:
       - backend
     environment:
       DEBUG: n9-node-conf # usefull to debug conf loading
+      MONGODB_URI: mongodb://mongodb:27017/skeleton-api
 
 networks:
   backend:

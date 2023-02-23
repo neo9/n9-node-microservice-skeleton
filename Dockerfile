@@ -15,7 +15,6 @@ COPY ./ ./
 RUN yarn autoclean --force
 
 ENV PORT 8080
-ENV MONGODB_URI "mongodb://mongodb:27017/starter-api"
 ENV NODE_ENV "development"
 
 RUN yarn run build
