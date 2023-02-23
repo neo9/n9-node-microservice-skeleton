@@ -14,7 +14,6 @@ export async function start(
 	const callbacksOnShutdownSignalReceived: N9NodeRouting.CallbacksBeforeShutdown[] = [];
 	Container.set('callbacksOnShutdownSignalReceived', callbacksOnShutdownSignalReceived);
 
-	// Load modules
 	const { server, conf } = await n9NodeRouting({
 		hasProxy: true,
 		http: {
