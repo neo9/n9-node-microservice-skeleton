@@ -70,9 +70,7 @@ export async function startAPI(
 	doCleanDb: boolean = true,
 ): Promise<void> {
 	const { error } = await mockAndCatchStd(async () => {
-		// Set env to 'test'
 		process.env.NODE_ENV = 'test';
-		// Start again (to init files)
 
 		const mongoConnectionString = await generateMongoUri({ tryToUseLocalMongo: true });
 		if (doCleanDb) {
@@ -92,7 +90,6 @@ export async function startAPI(
 			...confOverride,
 		});
 
-		// Add variables to context
 		apiContext.server = server;
 		apiContext.conf = conf;
 	});

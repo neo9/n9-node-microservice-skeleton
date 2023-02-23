@@ -6,16 +6,10 @@ import { get, post, startAPI, stopAPI } from './fixtures';
 
 const context: { user?: UserDetails; session?: string } = {};
 
-/*
- ** Start API
- */
 ava.before('Start API', async () => {
 	await startAPI({}, true);
 });
 
-/*
- ** modules/users/
- */
 ava.serial('POST /users => 200 with good params', async (t: Assertions) => {
 	const { body, err } = await post<UserRequestCreate, UserDetails>('/users', {
 		firstName: 'Neo',
@@ -30,7 +24,7 @@ ava.serial('POST /users => 200 with good params', async (t: Assertions) => {
 	t.is(body.lastName, 'Nine');
 	t.is(body.email, 'neo@neo9.fr');
 	t.is(body.password, undefined);
-	// Add to context
+
 	context.user = body;
 	context.session = JSON.stringify({
 		userId: body._id,
@@ -89,9 +83,6 @@ ava.serial('GET /users => 400 with page size too big', async (t: Assertions) => 
 	t.is(err.status, 400);
 });
 
-/*
- ** Stop API
- */
 ava.after('Stop server', async () => {
 	await stopAPI();
 });

@@ -2,16 +2,10 @@ import ava, { Assertions } from 'ava';
 
 import { get, startAPI, stopAPI } from './fixtures';
 
-/*
- ** Start API
- */
 ava.before('Start API', async () => {
 	await startAPI({}, true);
 });
 
-/*
- ** Information routes
- */
 // todo on init skeleton: replace n9-node-microservice-skeleton by api name
 ava.serial('GET / => n9-node-microservice-skeleton', async (t: Assertions) => {
 	const { body, stdout, stderr } = await get<{ name: string }>('/', 'json');
@@ -48,9 +42,6 @@ ava.serial('GET /404 => 404 status code', async (t: Assertions) => {
 	t.is(err.context.srcError.context.url, '/404');
 });
 
-/*
- ** Stop API
- */
 ava.after('Stop server', async () => {
 	await stopAPI();
 });
