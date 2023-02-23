@@ -1,5 +1,5 @@
 # stretch required for gc-stats post build
-FROM node:16.14.2-bullseye AS builder
+FROM node:18.14.2-buster AS builder
 
 WORKDIR /home/app
 
@@ -18,7 +18,7 @@ RUN yarn run build
 
 CMD ["yarn", "run", "dev"]
 
-FROM node:16.14.2-alpine3.15
+FROM node:18.14.2-alpine3.17
 
 WORKDIR /home/app
 
