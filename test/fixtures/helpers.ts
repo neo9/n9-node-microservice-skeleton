@@ -6,8 +6,8 @@ import * as stdMocks from 'std-mocks';
 import * as Mockito from 'ts-mockito';
 import { PartialDeep } from 'type-fest';
 
-import src from '../../src';
 import { Configuration } from '../../src/conf/models/configuration.models';
+import { start } from '../../src/start';
 
 export const print = true;
 export const context: { mongodServer?: MongoMemoryServer; [key: string]: any } = {};
@@ -59,7 +59,7 @@ export const startAPI = async (
 		await cleanDb();
 	}
 	stdMocks.use({ print });
-	const { server, db, conf } = await src({
+	const { server, db, conf } = await start({
 		n9NodeRoutingOptions: {
 			logOptions: {
 				// make format to JSON due to incompatible between std-mocks and pino
