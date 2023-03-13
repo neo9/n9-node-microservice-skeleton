@@ -8,7 +8,7 @@ export class IsObjectOrBoolean implements ClassValidator.ValidatorConstraintInte
 	}
 
 	public defaultMessage(): string {
-		return 'Value should be an object or a boolean';
+		return 'Value should be an object or an boolean';
 	}
 }
 

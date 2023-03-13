@@ -3,15 +3,11 @@ import * as ClassValidator from 'class-validator';
 
 @ClassValidator.ValidatorConstraint({ name: 'isStringOrNestedObject', async: false })
 export class IsStringOrNestedObject implements ClassValidator.ValidatorConstraintInterface {
-	public validate(value: Record<string | number, unknown>): boolean {
-		for (const recordValue of Object.values(value)) {
-			if (!ClassValidator.isObject(recordValue)) return false;
-			const errors = ClassValidator.validateSync(recordValue);
-			if (errors.length) {
-				return false;
-			}
-		}
-		return true;
+	public validate(value: unknown): boolean {
+		if (typeof value === 'string') return true;
+		if (!ClassValidator.isObject(value)) return false;
+		const errors = ClassValidator.validateSync(value);
+		return errors.length === 0;
 	}
 
 	public defaultMessage(): string {

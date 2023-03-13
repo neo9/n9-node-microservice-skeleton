@@ -1,4 +1,5 @@
 import { MongoUtils, StringMap } from '@neo9/n9-mongo-client';
+import type { Db } from 'mongodb';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { cb, Container, N9Error, N9HttpClient, N9Log } from 'n9-node-routing';
 import { join } from 'path';
@@ -12,8 +13,8 @@ import { start } from '../../src/start';
 export const print = true;
 export const context: { mongodServer?: MongoMemoryServer; [key: string]: any } = {};
 
-export const cleanDb = async (): Promise<void> => {
-	const collections = await context.db.collections();
+export const cleanDb = async (db: Db): Promise<void> => {
+	const collections = await db.collections();
 	for (const collection of collections) {
 		await collection.deleteMany({});
 	}
@@ -49,11 +50,10 @@ export const startAPI = async (
 		}
 	}
 	if (doCleanDb) {
-		await MongoUtils.connect(mongoConnectionString || 'mongodb://127.0.0.1:27017', {});
-		context.db = global.db;
-		await cleanDb();
+		const db = await MongoUtils.connect(mongoConnectionString || 'mongodb://127.0.0.1:27017', {});
+		await cleanDb(db);
 	}
-	const { server, db, conf } = await start({
+	const { server, conf } = await start({
 		n9NodeRoutingOptions: {
 			logOptions: {
 				// make format to JSON due to incompatible between std-mocks and pino
@@ -69,7 +69,6 @@ export const startAPI = async (
 
 	// Add variables to context
 	context.server = server;
-	context.db = db;
 	context.conf = conf;
 	// Flush logs output
 	stdMocks.flush();

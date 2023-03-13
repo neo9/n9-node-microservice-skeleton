@@ -1,5 +1,4 @@
 import { Server } from 'http';
-import type { Db } from 'mongodb';
 import n9NodeRouting, { Container, N9NodeRouting } from 'n9-node-routing';
 import { PartialDeep } from 'type-fest';
 
@@ -7,7 +6,7 @@ import { Configuration } from './conf/models/configuration.models';
 
 export async function start(
 	confOverride: PartialDeep<Configuration> = {},
-): Promise<{ server: Server; db: Db; conf: Configuration }> {
+): Promise<{ server: Server; conf: Configuration }> {
 	const pingDbs: N9NodeRouting.PingDb[] = [];
 	Container.set('pingDbs', pingDbs);
 	const callbacksBeforeShutdown: N9NodeRouting.CallbacksBeforeShutdown[] = [];
@@ -28,7 +27,7 @@ export async function start(
 			callbacksOnShutdownSignalReceived,
 		},
 		firstSequentialInitFileNames: [
-			'mongo.init.ts', // We need to did this init before all others because some init files need mongo connection or some services/repositories that need mongo connection
+			'mongo.init.ts', // We need to do this init before all others because some init files need mongo connection or some services/repositories that need mongo connection
 		],
 		conf: {
 			n9NodeConf: {
@@ -49,5 +48,5 @@ export async function start(
 		},
 	});
 
-	return { server, db, conf };
+	return { server, conf };
 }

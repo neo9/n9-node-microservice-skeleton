@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { EventEmitter } from 'events';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import {
+import type {
 	AutoEncryptionExtraOptions,
 	AutoEncryptionOptions,
 	ClientSession,
@@ -117,7 +117,7 @@ export class MongoAutoEncryptionOptionsImplementation implements AutoEncryptionO
 	extraOptions?: MongoAutoEncryptionExtraOptionsImplementation;
 
 	@IsOptional()
-	@IsInstance(MongoClient)
+	@IsInstance(EventEmitter)
 	keyVaultClient?: MongoClient;
 
 	@IsOptional()
@@ -550,7 +550,7 @@ export class MongoClientOptionsImplementation implements MongoClientOptions {
 	@IsOptional()
 	@isStringOrNestedObject()
 	@Type(() => MongoWriteConcernImplementation)
-	writeConcern?: MongoWriteConcernImplementation | string; // todo: find a way to allow string
+	writeConcern?: MongoWriteConcernImplementation | string;
 
 	@IsOptional()
 	@IsInt()

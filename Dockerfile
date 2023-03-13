@@ -1,5 +1,5 @@
 # stretch required for gc-stats post build
-FROM node:18.14.2-buster AS builder
+FROM node:16.14.2-buster AS builder
 
 WORKDIR /home/app
 
