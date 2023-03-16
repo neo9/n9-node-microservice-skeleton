@@ -1,3 +1,57 @@
+
+
+## [0.1.3](https://github.com/neo9/n9-node-microservice-skeleton/compare/0.1.2...0.1.3) (2023-03-16)
+
+
+### app
+
+* Remove unnecessary and death code ([13f99eb](https://github.com/neo9/n9-node-microservice-skeleton/commit/13f99eb9794f627c6577c50ca8790057e3968f58))
+
+### docker
+
+* Move MONGODB_URI from Dockerfile to docker compose ([77818e5](https://github.com/neo9/n9-node-microservice-skeleton/commit/77818e530b4ff25bbb589eaf4668754b2ed50967))
+
+### git
+
+* Update precomit hook to use lint-satged ([58e3716](https://github.com/neo9/n9-node-microservice-skeleton/commit/58e3716d9de28e35bd4d5965f1f53fd8c58dbfb4))
+
+### global
+
+* Add todo on init skeleton ([c683086](https://github.com/neo9/n9-node-microservice-skeleton/commit/c68308605d1586894a239ee007cb64e137653904))
+* Fix PR feadback ([e7e0c30](https://github.com/neo9/n9-node-microservice-skeleton/commit/e7e0c308575644dea0fdc80f183c33b4515b01d2))
+
+### index
+
+* Move start function in separated file ([05c0366](https://github.com/neo9/n9-node-microservice-skeleton/commit/05c0366764bc0f9bde7b74d8acc0ea95bd9a7456))
+
+### node
+
+* Upgrade NodeJS version to 16.16.0 required by ava ([36f3038](https://github.com/neo9/n9-node-microservice-skeleton/commit/36f3038dbffc83cdc2e98f548869947c829a2826))
+
+### test
+
+* Move user test in separated file ([5cc7a4c](https://github.com/neo9/n9-node-microservice-skeleton/commit/5cc7a4c60383842f9e243bb92e915d505412ec36))
+* Replace type by type-fest ([e42f0d3](https://github.com/neo9/n9-node-microservice-skeleton/commit/e42f0d38a601f3ffdb13255fa79a7b44425dad71))
+* Split fixures on many files ([7ffe854](https://github.com/neo9/n9-node-microservice-skeleton/commit/7ffe854445d5e3dc9a2c1bdba0a730f306a7075e))
+
+### users
+
+* Remove unnecessary comment ([abcd6de](https://github.com/neo9/n9-node-microservice-skeleton/commit/abcd6de2b7b6763575212b754a72937c72d21a06))
+
+### yarn
+
+* Upgrade all dependencies ([4806c9c](https://github.com/neo9/n9-node-microservice-skeleton/commit/4806c9c15174bbada8cb28451f7572e4941aa2ef))
+* Upgrade decode-uri-component from 0.2.0 to 0.2.2 (#36) ([0788f68](https://github.com/neo9/n9-node-microservice-skeleton/commit/0788f686cbc37595f00c1c59f7bd9612cc5bad00)), closes [#36](https://github.com/neo9/n9-node-microservice-skeleton/issues/36)
+* Upgrade got from 11.8.3 to 11.8.6 (#42) ([7bb7c1c](https://github.com/neo9/n9-node-microservice-skeleton/commit/7bb7c1ca617fe426ac9e33bbe4b3112945718921)), closes [#42](https://github.com/neo9/n9-node-microservice-skeleton/issues/42)
+* Upgrade http-cache-semantics from 4.1.0 to 4.1.1 (#38) ([3ded56e](https://github.com/neo9/n9-node-microservice-skeleton/commit/3ded56eb312435750cc9d8f5c9418bac20623bf5)), closes [#38](https://github.com/neo9/n9-node-microservice-skeleton/issues/38)
+* Upgrade json5 from 1.0.1 to 1.0.2 (#37) ([312b971](https://github.com/neo9/n9-node-microservice-skeleton/commit/312b97124904cbbb71894d691fb87781d8fbd4fe)), closes [#37](https://github.com/neo9/n9-node-microservice-skeleton/issues/37)
+* Upgrade major version of n9-node-routing ([b9511cc](https://github.com/neo9/n9-node-microservice-skeleton/commit/b9511cc9b89a87ced855c818834f4bead954f5ca))
+* Upgrade minimist from 1.2.5 to 1.2.8 (#41) ([00b963e](https://github.com/neo9/n9-node-microservice-skeleton/commit/00b963efe7108312898e8a3cbf4982d2aa19df57)), closes [#41](https://github.com/neo9/n9-node-microservice-skeleton/issues/41)
+* Upgrade moment from 2.29.1 to 2.29.4 (#34) ([af69105](https://github.com/neo9/n9-node-microservice-skeleton/commit/af69105cc122045cbc61afd3374db28e74a5a2aa)), closes [#34](https://github.com/neo9/n9-node-microservice-skeleton/issues/34)
+* Upgrade release-it and clean its configuration ([0172e20](https://github.com/neo9/n9-node-microservice-skeleton/commit/0172e207d4df04af1f4e7bab8e04fcec1790be07))
+* Upgrade semver-regex from 3.1.3 to 3.1.4 (#32) ([b694e46](https://github.com/neo9/n9-node-microservice-skeleton/commit/b694e46c111f3efba6c57629c6da9a6b3daf5aa4)), closes [#32](https://github.com/neo9/n9-node-microservice-skeleton/issues/32)
+* Upgrade urijs from 1.19.10 to 1.19.11 (#30) ([63f0a13](https://github.com/neo9/n9-node-microservice-skeleton/commit/63f0a13cec8889cc9ce4faf571a529a35cfa8f6e)), closes [#30](https://github.com/neo9/n9-node-microservice-skeleton/issues/30)
+
 ## [0.1.2](https://github.com/neo9/n9-node-microservice-skeleton/compare/0.1.1...0.1.2) (2022-03-21)
 
 
@@ -95,6 +149,3 @@
 * versions: Fix changelog generation ([0317f33](https://github.com/neo9/n9-node-microservice-skeleton/commit/0317f33))
 * tests: Fix tests ([4195923](https://github.com/neo9/n9-node-microservice-skeleton/commit/4195923))
 * init: Add dependencies ([6d26a7f](https://github.com/neo9/n9-node-microservice-skeleton/commit/6d26a7f))
-
-
-
