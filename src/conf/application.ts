@@ -5,7 +5,7 @@ import { Configuration } from './models/configuration.models';
 const conf: PartialDeep<Configuration> = {
 	n9NodeRoutingOptions: {
 		http: {
-			port: process.env.PORT || 8080,
+			port: process.env.PORT || 8080, // todo on init skeleton: Define your default port
 		},
 	},
 	mongo: {

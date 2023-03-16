@@ -1,10 +1,10 @@
 version: '3.4'
 services:
-  starter-api:
+  skeleton-api: # todo on init skeleton: rename by your api name
     build:
       context: ./
       target: builder
-    image: starter-api
+    image: skeleton-api # todo on init skeleton: rename by your api name
     command: yarn run dev
     volumes:
       - ./src:/home/app/src
@@ -12,15 +12,17 @@ services:
       - ./nodemon.json:/home/app/nodemon.json
     #      - ../commons-lib/dist:/home/app/node_modules/commons-lib/dist
     ports:
-      - 8080:8080 # app port
-      - 9101:9101 # metrics port
-      - 10010:10010 # debug port
+      - 8080:8080 # app port todo on init skeleton: replace my_new_project by your default port
+      - 9101:9101 # metrics port todo on init skeleton: maybe replace 9101 by another port to avoid conflict
+      - 10010:10010 # debug port todo on init skeleton: maybe replace 10010 by another port to avoid conflict
+      # todo on init skeleton: We suggest you to use same last 2 digits as your app port example: 8055:8055 9155:9101 10055:10055
+      # todo on init skeleton: update your package.json scripts to use your new port
     networks:
-      - backend
+      - backend # todo on init skeleton: maybe replace backend by another network name
     environment:
       DEBUG: n9-node-conf # usefull to debug conf loading
-      MONGODB_URI: mongodb://mongodb:27017/skeleton-api
+      MONGODB_URI: mongodb://mongodb:27017/skeleton-api # todo on init skeleton: replace by your mongodb uri
 
 networks:
-  backend:
+  backend: # todo on init skeleton: maybe replace backend by another network name
     external: true

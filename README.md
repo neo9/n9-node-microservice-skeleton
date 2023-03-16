@@ -22,3 +22,16 @@ Then go to :
 - `localhost:8080/users`
 
 Before the first commit, do not forget to remove `src/conf/env` folder.
+
+## Init your api (todo on init skeleton)
+
+To set up your api you need to edit many files to remove/replace all skeleton references like project name, this documentation, etc.
+
+- You have to edit `package.json`(name, description, version, author, repository, homepage)
+- Find all references to "todo on init skeleton" in repository and resolve them (We suggest you to start with `docker-compose.yml` that contains most of them)
+- Clean `CHANGELOG.md` file
+- Edit `README.md`:
+  - Rename project to your api name
+  - update documentation
+  - update `Start it locally with` sections to update bash commands
+  - and finally remove this section (Init your api)

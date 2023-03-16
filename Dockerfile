@@ -3,12 +3,19 @@ FROM node:16.14.2-bullseye AS builder
 
 WORKDIR /home/app
 
+# todo on init skeleton: if you need npmrc file for private packages you have 2 options:
+# 1. use custom docker image that has the .npmrc file in it (recommended):
+#    - replace FROM node:16.14.2-bullseye AS builder with FROM <your-image> AS builder
+#    - remove "COPY ./.npmrc /home/app/.npmrc" comment
+# 2. use .npmrc file in the project (not recommended):
+#    - uncomment "COPY ./.npmrc /home/app/.npmrc" line
+# if you dint need .npmrc file you can remove "COPY ./.npmrc /home/app/.npmrc" comment
+
 #COPY ./.npmrc /home/app/.npmrc
 
 COPY package.json ./
 COPY yarn.lock ./
 RUN yarn install
-#RUN rm .npmrc
 
 COPY ./ ./
 
