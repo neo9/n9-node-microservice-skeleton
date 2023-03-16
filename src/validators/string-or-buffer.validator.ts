@@ -1,10 +1,16 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import * as ClassValidator from 'class-validator';
+import {
+	isInstance,
+	isString,
+	registerDecorator,
+	ValidationOptions,
+	ValidatorConstraint,
+	ValidatorConstraintInterface,
+} from 'n9-node-routing';
 
-@ClassValidator.ValidatorConstraint({ name: 'isStringOrBuffer', async: false })
-export class IsStringOrBuffer implements ClassValidator.ValidatorConstraintInterface {
+@ValidatorConstraint({ name: 'isStringOrBuffer', async: false })
+export class IsStringOrBuffer implements ValidatorConstraintInterface {
 	public validate(value: unknown): boolean {
-		return ClassValidator.isString(value) || ClassValidator.isInstance(value, Buffer);
+		return isString(value) || isInstance(value, Buffer);
 	}
 
 	public defaultMessage(): string {
@@ -13,10 +19,10 @@ export class IsStringOrBuffer implements ClassValidator.ValidatorConstraintInter
 }
 
 export function isStringOrBuffer(
-	validationOptions?: ClassValidator.ValidationOptions,
+	validationOptions?: ValidationOptions,
 ): (object: object, propertyName: string) => void {
 	return (object: object, propertyName: string): void => {
-		ClassValidator.registerDecorator({
+		registerDecorator({
 			propertyName,
 			target: object.constructor,
 			options: validationOptions,

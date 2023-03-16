@@ -1,22 +1,28 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import * as ClassValidator from 'class-validator';
+import {
+	isBoolean,
+	isObject,
+	registerDecorator,
+	ValidationOptions,
+	ValidatorConstraint,
+	ValidatorConstraintInterface,
+} from 'n9-node-routing';
 
-@ClassValidator.ValidatorConstraint({ name: 'isObjectOrBoolean', async: false })
-export class IsObjectOrBoolean implements ClassValidator.ValidatorConstraintInterface {
+@ValidatorConstraint({ name: 'isObjectOrBoolean', async: false })
+export class IsObjectOrBoolean implements ValidatorConstraintInterface {
 	public validate(value: unknown): boolean {
-		return ClassValidator.isObject(value) || ClassValidator.isBoolean(value);
+		return isObject(value) || isBoolean(value);
 	}
 
 	public defaultMessage(): string {
-		return 'Value should be an object or a boolean';
+		return 'Value should be an object or an boolean';
 	}
 }
 
 export function isObjectOrBoolean(
-	validationOptions?: ClassValidator.ValidationOptions,
+	validationOptions?: ValidationOptions,
 ): (object: object, propertyName: string) => void {
 	return (object: object, propertyName: string): void => {
-		ClassValidator.registerDecorator({
+		registerDecorator({
 			propertyName,
 			target: object.constructor,
 			options: validationOptions,
