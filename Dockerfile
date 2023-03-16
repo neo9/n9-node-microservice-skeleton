@@ -1,11 +1,11 @@
 # stretch required for gc-stats post build
-FROM node:16.14.2-bullseye AS builder
+FROM node:16.16.0-bullseye AS builder
 
 WORKDIR /home/app
 
 # todo on init skeleton: if you need npmrc file for private packages you have 2 options:
 # 1. use custom docker image that has the .npmrc file in it (recommended):
-#    - replace FROM node:16.14.2-bullseye AS builder with FROM <your-image> AS builder
+#    - replace FROM node:16.16.0-bullseye AS builder with FROM <your-image> AS builder
 #    - remove "COPY ./.npmrc /home/app/.npmrc" comment
 # 2. use .npmrc file in the project (not recommended):
 #    - uncomment "COPY ./.npmrc /home/app/.npmrc" line
@@ -28,7 +28,7 @@ RUN yarn run build
 
 CMD ["yarn", "run", "dev"]
 
-FROM node:16.14.2-alpine3.15
+FROM node:16.16.0-alpine3.15
 
 WORKDIR /home/app
 
