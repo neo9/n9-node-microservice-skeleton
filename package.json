@@ -25,9 +25,6 @@
     "rm:src": "find ./ -maxdepth 1 -mindepth 1 ! \\( -name 'dist' \\) -exec rm -rf {} \\;",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "release": "export BABEL_DISABLE_CACHE=1 && release-it --ci",
-    "release:dry": "export BABEL_DISABLE_CACHE=1 && release-it --ci --dry-run=true",
-    "build:changelog": "conventional-changelog -i CHANGELOG.md -s -p jscs -r 0",
-    "post:release": "echo Successfully released $npm_package_version",
     "docker:start": "docker-compose up",
     "docker:mongodb-migrate:one-shot": "docker-compose -f docker-compose-mongodb-migration-one-shot.yml up"
   },
@@ -65,7 +62,7 @@
     "nodemon": "^2.0.20",
     "nyc": "^15.1.0",
     "prettier": "^2.8.4",
-    "release-it": "^15.6.0",
+    "release-it": "^15.9.0",
     "std-mocks": "^1.0.1",
     "ts-mockito": "^2.6.1",
     "ts-node": "^10.9.1",
