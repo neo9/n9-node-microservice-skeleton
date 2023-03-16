@@ -1,17 +1,19 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import * as ClassValidator from 'class-validator';
+import {
+	isObject,
+	registerDecorator,
+	validateSync,
+	ValidationOptions,
+	ValidatorConstraint,
+	ValidatorConstraintInterface,
+} from 'n9-node-routing';
 
-@ClassValidator.ValidatorConstraint({ name: 'isStringOrNestedObject', async: false })
-export class IsStringOrNestedObject implements ClassValidator.ValidatorConstraintInterface {
-	public validate(value: Record<string | number, unknown>): boolean {
-		for (const recordValue of Object.values(value)) {
-			if (!ClassValidator.isObject(recordValue)) return false;
-			const errors = ClassValidator.validateSync(recordValue);
-			if (errors.length) {
-				return false;
-			}
-		}
-		return true;
+@ValidatorConstraint({ name: 'isStringOrNestedObject', async: false })
+export class IsStringOrNestedObject implements ValidatorConstraintInterface {
+	public validate(value: unknown): boolean {
+		if (typeof value === 'string') return true;
+		if (!isObject(value)) return false;
+		const errors = validateSync(value);
+		return errors.length === 0;
 	}
 
 	public defaultMessage(): string {
@@ -20,10 +22,10 @@ export class IsStringOrNestedObject implements ClassValidator.ValidatorConstrain
 }
 
 export function isStringOrNestedObject(
-	validationOptions?: ClassValidator.ValidationOptions,
+	validationOptions?: ValidationOptions,
 ): (object: object, propertyName: string) => void {
 	return (object: object, propertyName: string): void => {
-		ClassValidator.registerDecorator({
+		registerDecorator({
 			propertyName,
 			target: object.constructor,
 			options: validationOptions,
