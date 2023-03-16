@@ -39,7 +39,7 @@ export const startAPI = async (
 			// no classic mongodb available, so use one in memory
 			context.mongodServer = await MongoMemoryServer.create({
 				binary: {
-					version: '4.2.2',
+					version: '6.0.4',
 				},
 			});
 
