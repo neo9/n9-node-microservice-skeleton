@@ -19,7 +19,7 @@ ava.serial('GET / => n9-node-microservice-skeleton', async (t: Assertions) => {
 });
 
 ava.serial('GET /ping => pong-db', async (t: Assertions) => {
-	const { body, stdout, stderr } = await get<string>('/ping', 'json');
+	const { body, stdout, stderr } = await get<object>('/ping', 'json');
 	const nbDbs = ['mongodb'].length;
 	t.deepEqual(body, { response: `pong-dbs-${nbDbs}` });
 	t.is(stderr.length, 0, `Request has errors: ${JSON.stringify(stderr)}`);
