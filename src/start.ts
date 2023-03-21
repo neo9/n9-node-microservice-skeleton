@@ -26,7 +26,7 @@ export async function start(
 			callbacksOnShutdownSignalReceived,
 		},
 		firstSequentialInitFileNames: [
-			'mongo.init.ts', // We need to do this init before all others because some init files need mongo connection or some services/repositories that need mongo connection
+			'mongo', // We need to do this init before all others because some init files need mongo connection or some services/repositories that need mongo connection
 		],
 		conf: {
 			n9NodeConf: {
