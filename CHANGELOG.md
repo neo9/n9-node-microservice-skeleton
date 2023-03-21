@@ -1,5 +1,24 @@
 
 
+## [0.1.4](https://github.com/neo9/n9-node-microservice-skeleton/compare/0.1.3...0.1.4) (2023-03-21)
+
+
+### doc
+
+* Update README to change ports on usage ([20eaff4](https://github.com/neo9/n9-node-microservice-skeleton/commit/20eaff43800f5cf86be1ffa0a3145e713c7a25e3))
+
+### lint
+
+* Update prettier ignore files and add prettier check on lint ([772a647](https://github.com/neo9/n9-node-microservice-skeleton/commit/772a6475f60739f60bbe185f2a67550e636dd19b))
+
+### mongo
+
+* Fix mongodb connexion init ([9b2665d](https://github.com/neo9/n9-node-microservice-skeleton/commit/9b2665db71d94591c0b7e343e05040351b66c79f))
+
+### yarn
+
+* Downgrade AVA to version 3 due to V8 error with gc-stats ([a7d460b](https://github.com/neo9/n9-node-microservice-skeleton/commit/a7d460b18a1d33d8a361c0464e99a636f0ade237))
+
 ## [0.1.3](https://github.com/neo9/n9-node-microservice-skeleton/compare/0.1.2...0.1.3) (2023-03-16)
 
 
