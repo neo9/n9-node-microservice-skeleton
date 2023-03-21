@@ -7,6 +7,7 @@
 Dockerfile
 Jenkinsfile
 .yarnclean
+CODEOWNERS
 
 # scripts
 *.sh
@@ -15,6 +16,7 @@ Jenkinsfile
 CHANGELOG.md
 yarn.lock
 package.json
+openapi-documentation.json
 
 # Logs
 logs
