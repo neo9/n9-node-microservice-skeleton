@@ -144,7 +144,7 @@ class MongoSocketOptionsImplementation implements SocketOptions {
 	connectTimeoutMS?: number;
 
 	@IsOptional()
-	@IsIn([4, 6, null])
+	@IsIn([4, 6])
 	family?: 4 | 6 | null;
 
 	@IsOptional()
@@ -276,7 +276,7 @@ export class MongoClientOptionsImplementation implements MongoClientOptions {
 	ecdhCurve?: string;
 
 	@IsOptional()
-	@IsIn([4, 6, null])
+	@IsIn([4, 6])
 	family?: 4 | 6 | null;
 
 	@IsOptional()
