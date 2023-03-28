@@ -30,6 +30,7 @@ To set up your api you need to edit many files to remove/replace all skeleton re
 - You have to edit `package.json`(name, description, version, author, repository, homepage, ports used 110000 and 10010 should be replaced by yours)
 - Find all references to "todo on init skeleton" in repository and resolve them (We suggest you to start with `docker-compose.yml` that contains most of them)
 - Clean `CHANGELOG.md` file
+- Delete .github directory
 - Edit `README.md`:
   - Rename project to your api name
   - Update documentation
