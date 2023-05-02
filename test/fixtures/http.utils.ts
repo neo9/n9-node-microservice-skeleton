@@ -40,7 +40,7 @@ export async function get<T extends string | object = object>(
 	return await wrapLogs<T>(
 		httpClient.get<T>(url(path), queryParams, {
 			session: defaultSession,
-			headers,
+			...headers,
 		}),
 	);
 }
